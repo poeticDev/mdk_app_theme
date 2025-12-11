@@ -39,3 +39,14 @@ const Map<ThemeBrand, ThemeBrandTokens> _brandTokens =
   ThemeBrand.defaultBrand: defaultBrandTokens,
   ThemeBrand.midnight: midnightBrandTokens,
 };
+
+extension ThemeBrandLabel on ThemeBrand {
+  String get label {
+    switch (this) {
+      case ThemeBrand.defaultBrand:
+        return 'Default';
+      case ThemeBrand.midnight:
+        return 'Midnight';
+    }
+  }
+}

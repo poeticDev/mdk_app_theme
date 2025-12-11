@@ -48,8 +48,8 @@
 - [x] `lib/theme_utilities.dart` 단일 export 파일을 만들어 소비자가 필요한 엔티티만 가져가도록 한다. (완료: 2025-12-11, `theme_utilities.dart` + README import 가이드)
 
 ## 5. 테스트 및 품질 게이트
-- [ ] tokens/ThemeData 빌더에 대한 단위 테스트를 작성해 ColorScheme, TextTheme, 버튼 스타일이 기대값과 일치하는지 검증한다.
-- [ ] ThemeController + Riverpod Provider 조합의 상태 전이 테스트(모드 토글, 시스템 모드 반영)를 작성한다.
+- [x] tokens/ThemeData 빌더에 대한 단위 테스트를 작성해 ColorScheme, TextTheme, 버튼 스타일이 기대값과 일치하는지 검증한다. (완료: 2025-12-11, `test/mdk_app_theme_test.dart` AppColors/AppTheme 검증)
+- [x] ThemeController + Riverpod Provider 조합의 상태 전이 테스트(모드 토글, 시스템 모드 반영)를 작성한다. (완료: 2025-12-11, `ThemeControllerNotifier` 테스트 + Stub controller)
 - [x] example 앱을 구성해 실제 AdaptiveTheme 토글이 동작하는지 수동/위젯 테스트를 실행한다. (완료: 2025-12-11, `example/mdk_app_theme_example.dart` Riverpod+AdaptiveTheme 샘플)
 - [ ] `dart format`, `flutter analyze`, `flutter test --coverage`를 GitHub Actions 등 CI에 연결한다.
 

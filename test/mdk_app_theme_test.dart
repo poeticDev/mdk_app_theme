@@ -13,16 +13,16 @@ void main() {
       final AppColors light = AppColors.light(ThemeBrand.defaultBrand);
       final AppColors dark = AppColors.dark(ThemeBrand.defaultBrand);
 
-      expect(light.primary.value, equals(0xFF626AE8));
-      expect(dark.surfaceElevated.value, equals(0xFF242A34));
+      expect(light.primary, equals(const Color(0xFF626AE8)));
+      expect(dark.surfaceElevated, equals(const Color(0xFF242A34)));
     });
 
     test('midnight brand exposes dedicated palette', () {
       final AppColors light = AppColors.light(ThemeBrand.midnight);
       final AppColors dark = AppColors.dark(ThemeBrand.midnight);
 
-      expect(light.primary.value, equals(0xFF3F8CFF));
-      expect(dark.surface.value, equals(0xFF0F1724));
+      expect(light.primary, equals(const Color(0xFF3F8CFF)));
+      expect(dark.surface, equals(const Color(0xFF0F1724)));
     });
   });
 
@@ -48,7 +48,7 @@ void main() {
   group('AppTheme', () {
     test('light theme composes expected colors', () {
       final ThemeData theme = AppTheme.light(isWebOverride: true);
-      expect(theme.colorScheme.primary.value, equals(0xFF626AE8));
+      expect(theme.colorScheme.primary, equals(const Color(0xFF626AE8)));
       const String expectedFontFamilyReference =
           'packages/${AppTypography.defaultFontPackage}/${AppTypography.defaultFontFamily}';
       expect(theme.textTheme.bodyMedium?.fontFamily,

@@ -9,7 +9,7 @@ MDK 제품군에서 공유하는 ThemeData, 디자인 토큰, AdaptiveTheme 연�
 - peer dependencies
   - `adaptive_theme: ^3.7.2`
   - `flutter_riverpod: ^3.0.3`
-  - `get_it: ^9.2.0`
+- 패키지 내부에서 `get_it: ^9.2.0`을 직접 의존하고 있으므로 host 앱은 별도 선언 없이 사용 가능합니다. 앱에서 자체적으로 get_it을 사용 중이라면 동일 버전을 권장합니다.
 
 ---
 
@@ -21,7 +21,6 @@ MDK 제품군에서 공유하는 ThemeData, 디자인 토큰, AdaptiveTheme 연�
 dependencies:
   adaptive_theme: ^3.7.2
   flutter_riverpod: ^3.0.3
-  get_it: ^9.2.0
   mdk_app_theme:
     git:
       url: https://github.com/your-org/mdk_app_theme.git
@@ -50,7 +49,7 @@ lib/
 ## 2. ThemeRegistry + getIt 구성
 
 1. 앱 시작 시 ThemeRegistry 인스턴스를 준비합니다.
-2. Adapter/Controller를 등록합니다.
+2. 기본 설정만 사용한다면 `ThemeRegistry.instance.ensureDefaults()`만 호출하면 됩니다. 커스텀 Adapter/Controller가 필요하면 아래와 같이 등록합니다.
 3. `ProviderScope`에서 `themeRegistryProvider`를 override 합니다.
 
 ```dart
@@ -78,7 +77,7 @@ class AppRoot extends StatelessWidget {
 }
 ```
 
-별도의 getIt 인스턴스를 쓰고 싶다면 `ThemeRegistry.custom(GetIt.asNewInstance())`를 사용하세요. 테스트에서는 registry에 mock adapter/controller를 등록하면 됩니다.
+별도의 getIt 인스턴스를 쓰고 싶다면 `ThemeRegistry.custom(GetIt.asNewInstance())`를 사용하세요. 위와 같이 등록 로직을 제공하지 않더라도 `themeRegistryProvider`가 내부적으로 `ensureDefaults()`를 호출하므로 기본 Adapter/Controller는 자동으로 준비됩니다. 테스트에서는 registry에 mock adapter/controller를 등록하면 됩니다.
 
 ---
 
@@ -139,6 +138,7 @@ class ThemeChip extends ConsumerWidget {
 ```
 
 브랜드 변경 시 `notifier.changeBrand(context, brand: ThemeBrand.midnight)`를 호출하면 AdaptiveTheme가 즉시 새 팔레트를 로드합니다.
+`ThemeBrand` 타입에는 `label` extension이 기본 제공되므로 README 예제처럼 `state.brand.label`을 바로 사용할 수 있습니다.
 
 ---
 

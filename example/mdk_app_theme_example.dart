@@ -5,12 +5,25 @@ import 'package:mdk_app_theme/theme_utilities.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  configureThemeRegistry();
+  final ThemeRegistry registry = ThemeRegistry.instance;
   final AdaptiveThemeMode initialMode =
       await AdaptiveTheme.getThemeMode() ?? AdaptiveThemeMode.light;
   runApp(
     ProviderScope(
+      overrides: [
+        themeRegistryProvider.overrideWithValue(registry),
+      ],
       child: ThemeDemoApp(initialMode: initialMode),
     ),
+  );
+}
+
+void configureThemeRegistry() {
+  final ThemeRegistry registry = ThemeRegistry.instance;
+  registry.registerAdapter(const AdaptiveThemePlatformAdapter());
+  registry.registerController(
+    (ThemePlatformAdapter adapter) => ThemeController(adapter: adapter),
   );
 }
 
@@ -177,17 +190,6 @@ class _BrandSelector extends ConsumerWidget {
         ),
       ],
     );
-  }
-}
-
-extension ThemeBrandLabel on ThemeBrand {
-  String get label {
-    switch (this) {
-      case ThemeBrand.defaultBrand:
-        return 'Default';
-      case ThemeBrand.midnight:
-        return 'Midnight';
-    }
   }
 }
 

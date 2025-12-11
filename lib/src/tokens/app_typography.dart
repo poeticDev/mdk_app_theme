@@ -1,13 +1,13 @@
 part of mdk_app_theme_base;
 
-enum _TypographyRole { bold, semiBold, medium, regular }
+enum AppTypographyRole { bold, semiBold, medium, regular }
 
 abstract class AppFontFamily {
   const AppFontFamily();
 
   TextStyle apply(
     TextStyle? base,
-    _TypographyRole role, {
+    AppTypographyRole role, {
     double scale = 1.0,
   });
 }
@@ -21,7 +21,7 @@ class VariableFontFamily extends AppFontFamily {
 
   final String family;
   final String package;
-  final Map<_TypographyRole, List<FontVariation>> roleVariations;
+  final Map<AppTypographyRole, List<FontVariation>> roleVariations;
 
   @override
   TextStyle apply(
@@ -52,7 +52,7 @@ class StaticFontFamily extends AppFontFamily {
   });
 
   final String family;
-  final Map<_TypographyRole, FontWeight> roleWeights;
+  final Map<AppTypographyRole, FontWeight> roleWeights;
   final String? package;
 
   @override
@@ -78,21 +78,21 @@ class StaticFontFamily extends AppFontFamily {
 const VariableFontFamily defaultVariableFontFamily = VariableFontFamily(
   family: 'Pretendard Variable',
   package: 'mdk_app_theme',
-  roleVariations: <_TypographyRole, List<FontVariation>>{
-    _TypographyRole.bold: <FontVariation>[FontVariation('wght', 700)],
-    _TypographyRole.semiBold: <FontVariation>[FontVariation('wght', 600)],
-    _TypographyRole.medium: <FontVariation>[FontVariation('wght', 500)],
-    _TypographyRole.regular: <FontVariation>[FontVariation('wght', 400)],
+  roleVariations: <AppTypographyRole, List<FontVariation>>{
+    AppTypographyRole.bold: <FontVariation>[FontVariation('wght', 700)],
+    AppTypographyRole.semiBold: <FontVariation>[FontVariation('wght', 600)],
+    AppTypographyRole.medium: <FontVariation>[FontVariation('wght', 500)],
+    AppTypographyRole.regular: <FontVariation>[FontVariation('wght', 400)],
   },
 );
 
 const StaticFontFamily paperlogyFontFamily = StaticFontFamily(
   family: 'Paperlogy',
-  roleWeights: <_TypographyRole, FontWeight>{
-    _TypographyRole.bold: FontWeight.w700,
-    _TypographyRole.semiBold: FontWeight.w600,
-    _TypographyRole.medium: FontWeight.w500,
-    _TypographyRole.regular: FontWeight.w400,
+  roleWeights: <AppTypographyRole, FontWeight>{
+    AppTypographyRole.bold: FontWeight.w700,
+    AppTypographyRole.semiBold: FontWeight.w600,
+    AppTypographyRole.medium: FontWeight.w500,
+    AppTypographyRole.regular: FontWeight.w400,
   },
 );
 
@@ -139,7 +139,7 @@ class AppTypography {
   }) {
     TextStyle apply(
       TextStyle? style,
-      _TypographyRole role, {
+      AppTypographyRole role, {
       double scale = 1.0,
     }) {
       return fontFamily.apply(style, role, scale: scale);
@@ -148,31 +148,31 @@ class AppTypography {
     return base.copyWith(
       displayLarge: apply(
         base.displayLarge,
-        _TypographyRole.bold,
+        AppTypographyRole.bold,
         scale: headlineScale,
       ),
       displayMedium: apply(
         base.displayMedium,
-        _TypographyRole.bold,
+        AppTypographyRole.bold,
         scale: headlineScale,
       ),
-      displaySmall: apply(base.displaySmall, _TypographyRole.bold),
+      displaySmall: apply(base.displaySmall, AppTypographyRole.bold),
       headlineLarge: apply(
         base.headlineLarge,
-        _TypographyRole.bold,
+        AppTypographyRole.bold,
         scale: headlineScale,
       ),
-      headlineMedium: apply(base.headlineMedium, _TypographyRole.semiBold),
-      headlineSmall: apply(base.headlineSmall, _TypographyRole.semiBold),
-      titleLarge: apply(base.titleLarge, _TypographyRole.bold),
-      titleMedium: apply(base.titleMedium, _TypographyRole.semiBold),
-      titleSmall: apply(base.titleSmall, _TypographyRole.medium),
-      bodyLarge: apply(base.bodyLarge, _TypographyRole.medium),
-      bodyMedium: apply(base.bodyMedium, _TypographyRole.medium),
-      bodySmall: apply(base.bodySmall, _TypographyRole.regular),
-      labelLarge: apply(base.labelLarge, _TypographyRole.medium),
-      labelMedium: apply(base.labelMedium, _TypographyRole.regular),
-      labelSmall: apply(base.labelSmall, _TypographyRole.regular),
+      headlineMedium: apply(base.headlineMedium, AppTypographyRole.semiBold),
+      headlineSmall: apply(base.headlineSmall, AppTypographyRole.semiBold),
+      titleLarge: apply(base.titleLarge, AppTypographyRole.bold),
+      titleMedium: apply(base.titleMedium, AppTypographyRole.semiBold),
+      titleSmall: apply(base.titleSmall, AppTypographyRole.medium),
+      bodyLarge: apply(base.bodyLarge, AppTypographyRole.medium),
+      bodyMedium: apply(base.bodyMedium, AppTypographyRole.medium),
+      bodySmall: apply(base.bodySmall, AppTypographyRole.regular),
+      labelLarge: apply(base.labelLarge, AppTypographyRole.medium),
+      labelMedium: apply(base.labelMedium, AppTypographyRole.regular),
+      labelSmall: apply(base.labelSmall, AppTypographyRole.regular),
     );
   }
 }

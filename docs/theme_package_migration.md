@@ -39,3 +39,10 @@ dependencies:
 - `docs/theme_package_checklist.md`와 `docs/release_workflow.md` 항목을 최신 상태로 동기화하고, 마이그레이션 진행도(브랜치, 커밋 SHA)를 기록한다.
 - 릴리스 노트(CHANGELOG)에는 패키지 전환으로 인한 breaking change, API 사용법, 필요한 smoke 테스트를 명시한다.
 - 릴리스 브랜치(`release/x.y.z`)를 생성하고, 상위 앱에서 git dependency를 통해 smoke test 후 태그(`vX.Y.Z`)를 생성한다.
+
+## 6. 새 브랜드 토큰 추가 절차
+1. `lib/src/brands` 하위에 `<brand>_brand_tokens.dart` 파일을 생성하고 `ThemeBrandTokens` 인스턴스를 정의한다.
+2. `lib/src/brands/theme_brand_registry.dart`에서 `ThemeBrand` enum과 `_brandTokens` 맵에 새 브랜드를 등록한다. `ThemeBrandLabel` extension에도 표시 이름을 추가한다.
+3. `test/mdk_app_theme_test.dart`에 해당 브랜드 팔레트를 검증하는 테스트를 추가한다.
+4. README/Docs(특히 "색상 커스터마이징/조회" 또는 브랜드 관련 섹션)에 새 브랜드 사용법을 기록한다.
+5. 상위 앱에서 새 브랜드를 사용해 smoke test를 수행하고 결과를 issue/PR에 첨부한다.

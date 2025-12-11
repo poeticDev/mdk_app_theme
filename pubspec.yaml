@@ -20,6 +20,7 @@ dev_dependencies:
   custom_lint: ^0.8.0
   riverpod_lint: ^3.0.3
   build_runner: ^2.7.1
+  lints: ^2.1.1
 
 flutter:
   uses-material-design: false
