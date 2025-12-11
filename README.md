@@ -46,38 +46,32 @@ lib/
 
 ---
 
-## 2. ThemeRegistry + getIt 구성
+## 2. ThemeController 구성 (DI-agnostic)
 
-1. 앱 시작 시 ThemeRegistry 인스턴스를 준비합니다.
-2. 기본 설정만 사용한다면 `ThemeRegistry.instance.ensureDefaults()`만 호출하면 됩니다. 커스텀 Adapter/Controller가 필요하면 아래와 같이 등록합니다.
-3. `ProviderScope`에서 `themeRegistryProvider`를 override 합니다.
+패키지는 `ThemeController`와 `ThemePlatformAdapter`만 제공하며, 의존성 주입 방식은 host 앱이 결정합니다.
 
 ```dart
-final ThemeRegistry registry = ThemeRegistry.instance;
+final ThemeController controller = ThemeController();
 
-void registerThemeDependencies() {
-  registry.registerAdapter(const AdaptiveThemePlatformAdapter());
-  registry.registerController(
-    (ThemePlatformAdapter adapter) => ThemeController(adapter: adapter),
-  );
-}
-
-class AppRoot extends StatelessWidget {
-  const AppRoot({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ProviderScope(
-      overrides: [
-        themeRegistryProvider.overrideWithValue(registry),
-      ],
-      child: const MyApp(),
-    );
-  }
-}
+// 필요 시 커스텀 어댑터 주입
+final ThemeController customController = ThemeController(
+  adapter: MyThemePlatformAdapter(),
+);
 ```
 
-필요하면 `ThemeRegistry.instance.registerAdapter(...)` 혹은 `registerController(...)`로 원하는 구현을 주입하세요. `ensureDefaults()`가 자동으로 기본 구현을 등록하므로, 아무것도 등록하지 않아도 동작합니다. 테스트/앱에서 커스텀 의존성을 써야 하면 위 API를 사용해 원하는 시점에 교체하면 됩니다. (별도의 get_it이나 기타 DI 컨테이너는 host 앱 책임입니다.)
+간단한 의존성 컨테이너가 필요하면 `ThemeRegistry`를 사용할 수 있습니다.
+
+```dart
+final ThemeRegistry registry = ThemeRegistry.ephemeral();
+registry.registerAdapter(const AdaptiveThemePlatformAdapter());
+registry.registerController(
+  (adapter) => ThemeController(adapter: adapter),
+);
+
+// 어디서든 registry.controller / registry.adapter 사용 가능
+```
+
+외부 DI(get_it, Riverpod, Provider 등)는 host 앱에서 원하는 방식으로 구성하면 됩니다. 패키지 본체는 어떤 DI도 강제하지 않습니다.
 
 ---
 
@@ -116,17 +110,45 @@ AdaptiveTheme Builder 안에서는 `ThemeToggle`, `ThemeControllerState`를 사�
 
 ## 4. ThemeController 상태 사용
 
-`themeControllerProvider`는 Core 로직, `themeControllerStateProvider`는 Riverpod Notifier API로 (모드/브랜드)을 제공합니다.
+패키지는 `ThemeController`와 `ThemeControllerState`만 제공하며, 상태관리 방식은 host 앱이 결정합니다. 아래는 `flutter_riverpod` v3를 사용하는 예시입니다.
 
 ```dart
+final Provider<ThemeController> themeControllerProvider =
+    Provider<ThemeController>((ref) => ThemeController());
+
+class ThemeStateNotifier extends Notifier<ThemeControllerState> {
+  late final ThemeController _controller;
+
+  @override
+  ThemeControllerState build() {
+    _controller = ref.watch(themeControllerProvider);
+    return initialThemeControllerState;
+  }
+
+  Future<void> toggleTheme(BuildContext context) async {
+    await _controller.toggle(context);
+    state = state.copyWith(mode: _controller.effectiveMode(context));
+  }
+
+  Future<void> changeBrand(BuildContext context, ThemeBrand brand) async {
+    await _controller.setBrand(context, brand: brand);
+    state = state.copyWith(brand: brand);
+  }
+}
+
+final themeStateProvider =
+    NotifierProvider<ThemeStateNotifier, ThemeControllerState>(
+  ThemeStateNotifier.new,
+);
+
 class ThemeChip extends ConsumerWidget {
   const ThemeChip({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ThemeControllerState state = ref.watch(themeControllerStateProvider);
-    final ThemeControllerNotifier notifier =
-        ref.read(themeControllerStateProvider.notifier);
+    final ThemeControllerState state = ref.watch(themeStateProvider);
+    final ThemeStateNotifier notifier =
+        ref.read(themeStateProvider.notifier);
 
     return FilterChip(
       label: Text(state.brand.label),
@@ -137,8 +159,7 @@ class ThemeChip extends ConsumerWidget {
 }
 ```
 
-브랜드 변경 시 `notifier.changeBrand(context, brand: ThemeBrand.midnight)`를 호출하면 AdaptiveTheme가 즉시 새 팔레트를 로드합니다.
-`ThemeBrand` 타입에는 `label` extension이 기본 제공되므로 README 예제처럼 `state.brand.label`을 바로 사용할 수 있습니다.
+`ThemeBrand`에는 `label` extension이 포함되어 있어 `state.brand.label`을 바로 사용할 수 있습니다. 다른 상태관리(ex. Provider, BLoC)도 동일한 방식으로 연결하면 됩니다.
 
 ---
 

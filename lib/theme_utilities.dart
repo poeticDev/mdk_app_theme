@@ -14,13 +14,8 @@ export 'mdk_app_theme.dart' show
     ThemeBrand,
     ThemeBrandLabel,
     ThemeController,
-    themeControllerProvider,
-    ThemeControllerNotifier,
     ThemeControllerState,
-    themeControllerStateProvider,
     ThemePlatformAdapter,
     AdaptiveThemePlatformAdapter,
-    themePlatformAdapterProvider,
     ThemeRegistry,
-    themeRegistryProvider,
     ThemeToggle;

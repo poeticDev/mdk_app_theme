@@ -1,6 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mdk_app_theme/mdk_app_theme.dart';
 
@@ -87,52 +86,24 @@ void main() {
     });
   });
 
-  group('ThemeControllerNotifier', () {
-    late _StubThemeController controller;
-    late ProviderContainer container;
-    late BuildContext fakeContext;
+  group('ThemeController', () {
+    test('toggle switches adapter mode', () async {
+      final _StubAdapter adapter = _StubAdapter();
+      final ThemeController controller = ThemeController(adapter: adapter);
+      final BuildContext context = _FakeBuildContext();
 
-    setUp(() {
-      controller = _StubThemeController();
-      container = ProviderContainer(overrides: [
-        themeControllerProvider.overrideWithValue(controller),
-      ]);
-      fakeContext = _FakeBuildContext();
-    });
+      await controller.toggle(context);
+      expect(adapter.mode, equals(AdaptiveThemeMode.dark));
 
-    tearDown(() {
-      container.dispose();
-    });
-
-    test('toggleTheme updates state mode', () async {
-      final ThemeControllerNotifier notifier =
-          container.read(themeControllerStateProvider.notifier);
-      expect(container.read(themeControllerStateProvider).mode,
-          equals(AdaptiveThemeMode.light));
-      await notifier.toggleTheme(fakeContext);
-      expect(container.read(themeControllerStateProvider).mode,
-          equals(AdaptiveThemeMode.dark));
-    });
-
-    test('changeBrand updates brand state', () async {
-      final ThemeControllerNotifier notifier =
-          container.read(themeControllerStateProvider.notifier);
-      expect(container.read(themeControllerStateProvider).brand,
-          equals(ThemeBrand.defaultBrand));
-      await notifier.changeBrand(
-        fakeContext,
-        brand: ThemeBrand.midnight,
-        isWebOverride: true,
-      );
-      expect(container.read(themeControllerStateProvider).brand,
-          equals(ThemeBrand.midnight));
-      expect(controller.brand, equals(ThemeBrand.midnight));
+      await controller.toggle(context);
+      expect(adapter.mode, equals(AdaptiveThemeMode.light));
     });
   });
 }
 
 class _StubAdapter extends ThemePlatformAdapter {
   AdaptiveThemeMode _mode = AdaptiveThemeMode.light;
+  AdaptiveThemeMode get mode => _mode;
 
   @override
   Future<AdaptiveThemeMode?> loadSavedThemeMode() {
@@ -166,40 +137,4 @@ class _StubAdapter extends ThemePlatformAdapter {
     _mode = AdaptiveThemeMode.system;
   }
 }
-
-class _StubThemeController extends ThemeController {
-  _StubThemeController() : super(adapter: _StubAdapter());
-
-  AdaptiveThemeMode _mode = AdaptiveThemeMode.light;
-  ThemeBrand _brand = ThemeBrand.defaultBrand;
-
-  ThemeBrand get brand => _brand;
-
-  @override
-  Future<AdaptiveThemeMode?> loadSavedThemeMode() async {
-    return _mode;
-  }
-
-  @override
-  AdaptiveThemeMode effectiveMode(BuildContext context) {
-    return _mode;
-  }
-
-  @override
-  Future<void> toggle(BuildContext context) async {
-    _mode = _mode == AdaptiveThemeMode.light
-        ? AdaptiveThemeMode.dark
-        : AdaptiveThemeMode.light;
-  }
-
-  @override
-  Future<void> setBrand(
-    BuildContext context, {
-    required ThemeBrand brand,
-    bool? isWebOverride,
-  }) async {
-    _brand = brand;
-  }
-}
-
 class _FakeBuildContext extends Fake implements BuildContext {}

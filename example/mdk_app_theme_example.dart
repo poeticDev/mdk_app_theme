@@ -3,37 +3,71 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mdk_app_theme/theme_utilities.dart';
 
+final Provider<ThemeController> themeControllerProvider =
+    Provider<ThemeController>((Ref ref) {
+  return ThemeController();
+});
+
+class ThemeStateNotifier extends Notifier<ThemeControllerState> {
+  late final ThemeController _controller;
+
+  @override
+  ThemeControllerState build() {
+    _controller = ref.watch(themeControllerProvider);
+    return const ThemeControllerState(
+      mode: AdaptiveThemeMode.light,
+      brand: ThemeBrand.defaultBrand,
+    );
+  }
+
+  Future<void> refresh(BuildContext context) async {
+    final AdaptiveThemeMode mode = _controller.effectiveMode(context);
+    state = state.copyWith(mode: mode);
+  }
+
+  Future<void> toggleTheme(BuildContext context) async {
+    await _controller.toggle(context);
+    await refresh(context);
+  }
+
+  Future<void> changeBrand(
+    BuildContext context, {
+    required ThemeBrand brand,
+    bool? isWebOverride,
+  }) async {
+    await _controller.setBrand(
+      context,
+      brand: brand,
+      isWebOverride: isWebOverride,
+    );
+    state = state.copyWith(brand: brand);
+  }
+}
+
+final NotifierProvider<ThemeStateNotifier, ThemeControllerState>
+    themeStateProvider =
+    NotifierProvider<ThemeStateNotifier, ThemeControllerState>(
+  ThemeStateNotifier.new,
+);
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureThemeRegistry();
-  final ThemeRegistry registry = ThemeRegistry.instance;
   final AdaptiveThemeMode initialMode =
       await AdaptiveTheme.getThemeMode() ?? AdaptiveThemeMode.light;
   runApp(
     ProviderScope(
-      overrides: [
-        themeRegistryProvider.overrideWithValue(registry),
-      ],
       child: ThemeDemoApp(initialMode: initialMode),
     ),
   );
 }
 
-void configureThemeRegistry() {
-  final ThemeRegistry registry = ThemeRegistry.instance;
-  registry.registerAdapter(const AdaptiveThemePlatformAdapter());
-  registry.registerController(
-    (ThemePlatformAdapter adapter) => ThemeController(adapter: adapter),
-  );
-}
-
-class ThemeDemoApp extends StatelessWidget {
+class ThemeDemoApp extends ConsumerWidget {
   const ThemeDemoApp({required this.initialMode, super.key});
 
   final AdaptiveThemeMode initialMode;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AdaptiveTheme(
       light: AppTheme.light(isWebOverride: true),
       dark: AppTheme.dark(isWebOverride: true),
@@ -61,18 +95,23 @@ class _ThemeDemoHomePageState extends ConsumerState<ThemeDemoHomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(themeControllerStateProvider.notifier)
-          .refresh(context);
+      ref.read(themeStateProvider.notifier).refresh(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final ThemeControllerState state = ref.watch(themeStateProvider);
+    final ThemeStateNotifier notifier = ref.read(themeStateProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('MDK Theme Demo'),
-        actions: const <Widget>[ThemeToggle()],
+        actions: <Widget>[
+          ThemeToggle(
+            isDarkMode: state.isDark,
+            onToggle: notifier.toggleTheme,
+          ),
+        ],
       ),
       body: const _ThemeDemoBody(),
     );
@@ -105,7 +144,7 @@ class _ThemeInfoPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
-    final ThemeControllerState state = ref.watch(themeControllerStateProvider);
+    final ThemeControllerState state = ref.watch(themeStateProvider);
     return Center(
       child: Card(
         margin: const EdgeInsets.all(24),
@@ -161,9 +200,9 @@ class _BrandSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ThemeControllerState state = ref.watch(themeControllerStateProvider);
-    final ThemeControllerNotifier notifier =
-        ref.read(themeControllerStateProvider.notifier);
+    final ThemeControllerState state = ref.watch(themeStateProvider);
+    final ThemeStateNotifier notifier =
+        ref.read(themeStateProvider.notifier);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

@@ -1,26 +1,6 @@
 part of mdk_app_theme_base;
 
-final Provider<ThemeRegistry> themeRegistryProvider =
-    Provider<ThemeRegistry>((Ref ref) {
-  final ThemeRegistry registry = ThemeRegistry.instance;
-  registry.ensureDefaults();
-  return registry;
-});
-
-final Provider<ThemePlatformAdapter> themePlatformAdapterProvider =
-    Provider<ThemePlatformAdapter>((Ref ref) {
-  final ThemeRegistry registry = ref.watch(themeRegistryProvider);
-  return registry.adapter;
-});
-
 /// AdaptiveTheme와 AppTheme를 활용한 테마 관리 클래스
-/// Riverpod 기반 ThemeController
-final Provider<ThemeController> themeControllerProvider =
-    Provider<ThemeController>((Ref ref) {
-  final ThemeRegistry registry = ref.watch(themeRegistryProvider);
-  return registry.controller;
-});
-
 class ThemeController {
   ThemeController({ThemePlatformAdapter? adapter})
       : _adapter = adapter ?? const AdaptiveThemePlatformAdapter();

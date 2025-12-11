@@ -6,13 +6,13 @@
   - `pubspec.yaml`에서 `get_it`을 삭제했습니다.
   - ThemeRegistry가 자체적으로 의존성을 보관하도록 리팩터링해, 더 이상 외부 DI 컨테이너에 의존하지 않습니다.
 
-- [ ] **ThemeRegistry 재설계**
-  - `ThemeDependencyContainer` 같은 추상 인터페이스 또는 단순 팩토리(예: `ThemeDependencies(adapterFactory, controllerFactory)`)로 축소합니다.
-  - 기본 구현은 패키지 내부에서 제공하되, host 앱이 원하는 DI 컨테이너로 래핑할 수 있도록 합니다.
+- [x] **ThemeRegistry 재설계** (완료: 2025-12-11)
+  - 단순 in-memory 컨테이너(`ThemeRegistry.ephemeral()`)로 축소했고, `registerAdapter`/`registerController`만 제공하도록 변경했습니다.
+  - host 앱은 필요하면 자체 DI로 래핑할 수 있습니다.
 
-- [ ] **Riverpod 의존 제거**
-  - 패키지 내부에서는 순수 컨트롤러/상태 객체만 제공하고, Riverpod Provider/Notifier는 선택적 레이어로 분리합니다.
-  - 예제/문서에서는 Riverpod 연동 예시를 보여주되, host 앱이 원하는 상태관리/DI를 붙일 수 있도록 안내합니다.
+- [x] **Riverpod 의존 제거** (완료: 2025-12-11)
+  - 패키지 내부에서 Riverpod import와 Provider를 전부 삭제했습니다.
+  - README/예제에서만 Riverpod 연동 예시를 보여주며, host 앱 커스터마이징을 강조합니다.
 
 - [ ] **README/문서 업데이트**
   - 설치 섹션에서 "DI-agnostic" 철학을 명시하고, get_it/Riverpod은 예시일 뿐임을 설명합니다.

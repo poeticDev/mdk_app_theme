@@ -14,7 +14,7 @@
   - `lib/theme/deprecated_theme_tokens.dart` 및 `docs/theme_design.md`: 기존 색상 상수와 향후 브랜드/AdaptiveTheme 사용 전략을 문서화하여 레거시 호환성 참고 자료로 유지.
 - [x] 외부 의존성(google_fonts, riverpod, adaptive_theme 등)을 목록화하고, 패키지의 직접 의존성 vs 소비자 프로젝트 의존성으로 구분한다.
   - 패키지 직접 의존성(실제 코드에서 사용): `flutter` SDK(Material, Foundation), `adaptive_theme`(테마 모드 저장/토글), `flutter_riverpod`(ThemeController Provider) 세 가지는 새 패키지 `dependencies`로 이관 필요.
-  - 소비자 프로젝트 책임: Pretendard Variable 폰트 asset(또는 GoogleFonts), `get_it`(앱 DI), AdaptiveTheme 초기화 부트스트랩, `ThemeToggle`을 배치할 컨테이너/라우트는 각 앱에서 조립.
+  - 소비자 프로젝트 책임: Pretendard Variable 폰트 asset(또는 GoogleFonts), 앱 DI/상태관리 구성(get_it, Riverpod 등), AdaptiveTheme 초기화 부트스트랩, `ThemeToggle`을 배치할 컨테이너/라우트는 각 앱에서 조립.
   - 메모: peer dependency 정책/폰트 포함 여부는 2025-12-11 기준 결정 완료. README에 권장 버전을 기입한다.
 - [x] 패키지가 노출해야 할 퍼블릭 API(AppTheme, AppColors, AppTypography, ThemeController, ThemeToggle 등)를 확정하고, 내부 전용 API는 `lib/src`에 격리한다.
   - 후보: `AppTheme`(ThemeData factory), `AppColors`/`ThemeBrand`, `AppTypography`, `ThemeController` + `themeControllerProvider`, `ThemeToggle`, 향후 `ThemeRegistry`/`ThemePlatformAdapter` 인터페이스, 토큰 상수(예: spacing, border) 등.
