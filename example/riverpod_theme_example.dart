@@ -1,21 +1,68 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mdk_app_theme/theme_utilities.dart';
+
+final Provider<ThemeController> themeControllerProvider =
+    Provider<ThemeController>((Ref ref) {
+      return ThemeController();
+    });
+
+class ThemeStateNotifier extends Notifier<ThemeControllerState> {
+  late final ThemeController _controller;
+
+  @override
+  ThemeControllerState build() {
+    _controller = ref.watch(themeControllerProvider);
+    return const ThemeControllerState(
+      mode: AdaptiveThemeMode.light,
+      brand: ThemeBrand.defaultBrand,
+    );
+  }
+
+  Future<void> refresh(BuildContext context) async {
+    final AdaptiveThemeMode mode = _controller.effectiveMode(context);
+    state = state.copyWith(mode: mode);
+  }
+
+  Future<void> toggleTheme(BuildContext context) async {
+    await _controller.toggle(context);
+    await refresh(context);
+  }
+
+  Future<void> changeBrand(
+    BuildContext context, {
+    required ThemeBrand brand,
+    bool? isWebOverride,
+  }) async {
+    await _controller.setBrand(
+      context,
+      brand: brand,
+      isWebOverride: isWebOverride,
+    );
+    state = state.copyWith(brand: brand);
+  }
+}
+
+final NotifierProvider<ThemeStateNotifier, ThemeControllerState>
+themeStateProvider = NotifierProvider<ThemeStateNotifier, ThemeControllerState>(
+  ThemeStateNotifier.new,
+);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final AdaptiveThemeMode initialMode =
       await AdaptiveTheme.getThemeMode() ?? AdaptiveThemeMode.light;
-  runApp(ThemeDemoApp(initialMode: initialMode));
+  runApp(ProviderScope(child: ThemeDemoApp(initialMode: initialMode)));
 }
 
-class ThemeDemoApp extends StatelessWidget {
+class ThemeDemoApp extends ConsumerWidget {
   const ThemeDemoApp({required this.initialMode, super.key});
 
   final AdaptiveThemeMode initialMode;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AdaptiveTheme(
       light: AppTheme.light(isWebOverride: true),
       dark: AppTheme.dark(isWebOverride: true),
@@ -31,108 +78,65 @@ class ThemeDemoApp extends StatelessWidget {
   }
 }
 
-class ThemeDemoHomePage extends StatefulWidget {
+class ThemeDemoHomePage extends ConsumerStatefulWidget {
   const ThemeDemoHomePage({super.key});
 
   @override
-  State<ThemeDemoHomePage> createState() => _ThemeDemoHomePageState();
+  ConsumerState<ThemeDemoHomePage> createState() => _ThemeDemoHomePageState();
 }
 
-class _ThemeDemoHomePageState extends State<ThemeDemoHomePage> {
-  final ThemeController _controller = ThemeController();
-  ThemeControllerState _state = const ThemeControllerState(
-    mode: AdaptiveThemeMode.light,
-    brand: ThemeBrand.defaultBrand,
-  );
-
+class _ThemeDemoHomePageState extends ConsumerState<ThemeDemoHomePage> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initialize(context);
-    });
-  }
-
-  Future<void> _initialize(BuildContext context) async {
-    final AdaptiveThemeMode? saved = await _controller.loadSavedThemeMode();
-    if (!mounted) return;
-    if (saved != null) {
-      setState(() {
-        _state = _state.copyWith(mode: saved);
-      });
-    }
-    await _refreshMode(context);
-  }
-
-  Future<void> _refreshMode(BuildContext context) async {
-    final AdaptiveThemeMode mode = _controller.effectiveMode(context);
-    if (!mounted) return;
-    setState(() {
-      _state = _state.copyWith(mode: mode);
-    });
-  }
-
-  Future<void> _toggle(BuildContext context) async {
-    await _controller.toggle(context);
-    await _refreshMode(context);
-  }
-
-  Future<void> _changeBrand(BuildContext context, ThemeBrand brand) async {
-    await _controller.setBrand(context, brand: brand);
-    if (!mounted) return;
-    setState(() {
-      _state = _state.copyWith(brand: brand);
+      ref.read(themeStateProvider.notifier).refresh(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final ThemeControllerState state = ref.watch(themeStateProvider);
+    final ThemeStateNotifier notifier = ref.read(themeStateProvider.notifier);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MDK Theme Demo (Pure)'),
+        title: const Text('MDK Theme Demo (Riverpod)'),
         actions: <Widget>[
-          ThemeToggle(isDarkMode: _state.isDark, onToggle: _toggle),
+          ThemeToggle(isDarkMode: state.isDark, onToggle: notifier.toggleTheme),
         ],
       ),
-      body: _ThemeDemoBody(
-        state: _state,
-        onBrandChanged: (ThemeBrand brand) => _changeBrand(context, brand),
-      ),
+      body: const _ThemeDemoBody(),
     );
   }
 }
 
-class _ThemeDemoBody extends StatelessWidget {
-  const _ThemeDemoBody({required this.state, required this.onBrandChanged});
-
-  final ThemeControllerState state;
-  final ValueChanged<ThemeBrand> onBrandChanged;
+class _ThemeDemoBody extends ConsumerWidget {
+  const _ThemeDemoBody();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          _ThemeInfoPanel(state: state),
-          const SizedBox(height: 24),
-          _BrandSelector(state: state, onBrandChanged: onBrandChanged),
+        children: const <Widget>[
+          _ThemeInfoPanel(),
+          SizedBox(height: 24),
+          _BrandSelector(),
         ],
       ),
     );
   }
 }
 
-class _ThemeInfoPanel extends StatelessWidget {
-  const _ThemeInfoPanel({required this.state});
-
-  final ThemeControllerState state;
+class _ThemeInfoPanel extends ConsumerWidget {
+  const _ThemeInfoPanel();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
+    final ThemeControllerState state = ref.watch(themeStateProvider);
     return Center(
       child: Card(
         margin: const EdgeInsets.all(24),
@@ -183,14 +187,13 @@ class _ThemeInfoContent extends StatelessWidget {
   }
 }
 
-class _BrandSelector extends StatelessWidget {
-  const _BrandSelector({required this.state, required this.onBrandChanged});
-
-  final ThemeControllerState state;
-  final ValueChanged<ThemeBrand> onBrandChanged;
+class _BrandSelector extends ConsumerWidget {
+  const _BrandSelector();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ThemeControllerState state = ref.watch(themeStateProvider);
+    final ThemeStateNotifier notifier = ref.read(themeStateProvider.notifier);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -202,7 +205,7 @@ class _BrandSelector extends StatelessWidget {
             if (next == null || next == state.brand) {
               return;
             }
-            onBrandChanged(next);
+            notifier.changeBrand(context, brand: next, isWebOverride: true);
           },
           items: ThemeBrand.values
               .map(
@@ -214,30 +217,6 @@ class _BrandSelector extends StatelessWidget {
               .toList(),
         ),
       ],
-    );
-  }
-}
-
-class ThemeToggle extends StatelessWidget {
-  const ThemeToggle({
-    super.key,
-    required this.isDarkMode,
-    required this.onToggle,
-  });
-
-  final bool isDarkMode;
-  final Future<void> Function(BuildContext context) onToggle;
-
-  @override
-  Widget build(BuildContext context) {
-    final String tooltip = isDarkMode ? '라이트 모드로 전환' : '다크 모드로 전환';
-    final IconData icon = isDarkMode ? Icons.dark_mode : Icons.light_mode;
-    final Color iconColor = isDarkMode ? Colors.yellow : Colors.orangeAccent;
-
-    return IconButton(
-      tooltip: tooltip,
-      icon: Icon(icon, color: iconColor),
-      onPressed: () => onToggle(context),
     );
   }
 }
