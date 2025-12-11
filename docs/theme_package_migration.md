@@ -20,9 +20,9 @@ dependencies:
 - 앱 진입점에서 `ThemeRegistry`를 초기화하고, 기존 AdaptiveTheme bootstrap 코드를 README 섹션 2~4 단계와 동일하게 교체한다.
 
 ## 2. ThemeController 연동
-1. `ThemeRegistry.instance`에 맞춰 getIt DI 등록 함수를 정리한다.
-2. 기존 `ThemeController` 싱글톤/Provider 정의를 제거하고 `themeRegistryProvider` override를 사용하는 ProviderScope를 구성한다.
-3. 기존 위젯에서 사용하는 `ThemeController` 접근 코드를 `themeControllerProvider` 혹은 `themeControllerStateProvider`로 교체한다.
+1. Host 앱이 사용하는 DI/상태 관리 방식에 맞춰 `ThemeController` 인스턴스를 생성하고 주입한다. (단순 팩토리를 사용하거나, 필요 시 `ThemeRegistry.ephemeral()`로 의존성을 보관한다.)
+2. 기존 `ThemeController` 싱글톤/Provider 정의를 제거하고, 새 패키지가 제공하는 순수 클래스(`ThemeController`, `ThemeControllerState`)를 기반으로 앱의 상태 관리 계층(Riverpod, Provider, BLoC 등)을 구성한다.
+3. 기존 위젯에서 사용하는 컨트롤러 접근 코드를 새로운 상태 provider/컨테이너로 교체한다.
 
 ## 3. 위젯/토큰 교체
 - `AppTheme`, `AppColors`, `AppTypography`, `ThemeToggle`를 직접 import하던 경로를 `package:mdk_app_theme/theme_utilities.dart`로 통일한다.

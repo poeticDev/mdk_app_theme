@@ -78,33 +78,28 @@ registry.registerController(
 ## 3. AdaptiveTheme 부트스트랩
 
 ```dart
+final Provider<ThemeController> themeControllerProvider =
+    Provider((_) => ThemeController());
+
+final themeStateProvider =
+    NotifierProvider<ThemeStateNotifier, ThemeControllerState>(
+  ThemeStateNotifier.new,
+);
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  registerThemeDependencies();
   final AdaptiveThemeMode initialMode =
       await AdaptiveTheme.getThemeMode() ?? AdaptiveThemeMode.light;
 
   runApp(
     ProviderScope(
-      overrides: [
-        themeRegistryProvider.overrideWithValue(ThemeRegistry.instance),
-      ],
-      child: AdaptiveTheme(
-        light: AppTheme.light(isWebOverride: true),
-        dark: AppTheme.dark(isWebOverride: true),
-        initial: initialMode,
-        builder: (lightTheme, darkTheme) => MaterialApp(
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          home: const ThemeDemoHomePage(),
-        ),
-      ),
+      child: ThemeDemoApp(initialMode: initialMode),
     ),
   );
 }
 ```
 
-AdaptiveTheme Builder 안에서는 `ThemeToggle`, `ThemeControllerState`를 사용해 UI 상태를 갱신합니다.
+`ThemeDemoApp`에서는 `AdaptiveTheme` builder 내부에서 `ThemeToggle`과 `themeStateProvider`를 활용해 UI 상태를 갱신합니다. (Riverpod을 사용하지 않는다면 ProviderScope 대신 앱에서 사용하는 상태 관리 방법을 그대로 적용하면 됩니다.)
 
 ---
 

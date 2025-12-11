@@ -42,14 +42,14 @@
 - [x] Variable 폰트 + Paperlogy 정적 폰트 전략을 모두 지원하고, AppTypography에서 `AppFontFamily` 인터페이스로 선택 가능하게 한다. (완료: 2025-12-11)
 
 ## 4. API 정립과 DI 전략
-- [x] `ThemeRegistry` 혹은 `ThemeDependencyResolver`를 설계해 getIt 기반 DI를 패키지 외부에서 제어하도록 한다.
-  - `ThemeRegistry`를 도입해 getIt 싱글톤에 adapter/controller를 등록하고, `themeRegistryProvider` override로 host 앱 DI와 연결하도록 README/샘플을 갱신했다. (2025-12-11)
-- [x] Riverpod 상태를 `StateNotifierProvider`로 래핑해 default controller를 제공하되, host 앱이 커스터마이징할 수 있는 팩토리를 노출한다. (완료: 2025-12-11, `themeControllerStateProvider` + README 상태 구독 섹션)
+- [x] `ThemeRegistry` 혹은 `ThemeDependencyResolver`를 설계해 host 앱이 원하는 DI로 조립할 수 있도록 한다.
+  - `ThemeRegistry`를 in-memory 컨테이너로 단순화했고, `registerAdapter`/`registerController`만 제공해 어떤 DI에도 의존하지 않는다. (2025-12-11)
+- [x] 상태 관리 레이어는 host 앱이 구현하도록 두고, README/예제에서 Riverpod(v3) 연동 예시만 참고용으로 제공한다. (2025-12-11, Riverpod 예제는 `example/`에서 분리)
 - [x] `lib/theme_utilities.dart` 단일 export 파일을 만들어 소비자가 필요한 엔티티만 가져가도록 한다. (완료: 2025-12-11, `theme_utilities.dart` + README import 가이드)
 
 ## 5. 테스트 및 품질 게이트
 - [x] tokens/ThemeData 빌더에 대한 단위 테스트를 작성해 ColorScheme, TextTheme, 버튼 스타일이 기대값과 일치하는지 검증한다. (완료: 2025-12-11, `test/mdk_app_theme_test.dart` AppColors/AppTheme 검증)
-- [x] ThemeController + Riverpod Provider 조합의 상태 전이 테스트(모드 토글, 시스템 모드 반영)를 작성한다. (완료: 2025-12-11, `ThemeControllerNotifier` 테스트 + Stub controller)
+- [x] ThemeController 동작(토글/브랜드 변경)을 순수 객체 테스트로 검증한다. (완료: 2025-12-11, `_StubAdapter` 기반 테스트)
 - [x] example 앱을 구성해 실제 AdaptiveTheme 토글이 동작하는지 수동/위젯 테스트를 실행한다. (완료: 2025-12-11, `example/mdk_app_theme_example.dart` Riverpod+AdaptiveTheme 샘플)
 - [ ] `dart format`, `flutter analyze`, `flutter test --coverage`를 GitHub Actions 등 CI에 연결한다.
 

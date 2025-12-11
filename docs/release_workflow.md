@@ -19,6 +19,7 @@
 - ThemeToggle이 라이트/다크 전환을 수행하는지 확인.
 - 브랜드 드롭다운(Default ↔ Midnight) 동작 및 ColorScheme 적용 확인.
 - Pretendard/Paperlogy 폰트 선택 시 UI가 올바르게 렌더링되는지 확인.
+- Host 앱의 DI/상태 관리 계층(예: get_it, Riverpod, Provider 등)에 `ThemeController`가 기대 방식으로 주입되는지 확인.
 
 ## Issue & Contribution 가이드
 - `.github/ISSUE_TEMPLATE/theme_change.md`를 사용해 토큰/테마 변경 요청 시 디자인 승인·테스트 계획을 명시한다.
