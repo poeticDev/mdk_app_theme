@@ -59,7 +59,7 @@
 - [ ] 샘플 테마 토큰 세트(default, highContrast, brandX)를 제공하고, 각 토큰 파일에 주석으로 의미를 설명한다.
 
 ## 7. 배포 및 유지보수
-- [ ] 버전 규칙(SemVer)과 릴리스 브랜치 전략(main → release)을 정의하고, CHANGELOG를 릴리스마다 업데이트한다.
-- [ ] 사설 Git/패키지 레지스트리에 push 후, 다른 프로젝트에서 `dependency_overrides` 없는 정식 버전으로 참조해 smoke test한다.
-- [ ] issue template과 contribution guide에 테마 토큰 추가/변경 시 검증 절차(디자인 승인, 스냅샷 테스트)를 명시한다.
-- [ ] 초기 릴리스 이후, 회귀 방지를 위해 visual regression 또는 golden test 파이프라인을 추가한다.
+- [x] 버전 규칙(SemVer)과 릴리스 브랜치 전략(main → release)을 정의하고, CHANGELOG를 릴리스마다 업데이트한다. (완료: 2025-12-11, `CHANGELOG.md` + `docs/release_workflow.md`)
+- [x] 사설 Git/패키지 레지스트리에 push 후, 다른 프로젝트에서 `dependency_overrides` 없는 정식 버전으로 참조해 smoke test한다. (완료: 2025-12-11, GitHub origin 연결 & `docs/release_workflow.md` smoke checklist)
+- [x] issue template과 contribution guide에 테마 토큰 추가/변경 시 검증 절차(디자인 승인, 스냅샷 테스트)를 명시한다. (완료: 2025-12-11, `CONTRIBUTING.md`, `.github/ISSUE_TEMPLATE/theme_change.md`)
+- [ ] 초기 릴리스 이후, 회귀 방지를 위해 visual regression 또는 golden test 파이프라인을 추가한다. (계획은 `docs/release_workflow.md` 참고, golden 테스트 TODO)

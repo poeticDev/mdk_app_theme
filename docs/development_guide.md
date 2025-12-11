@@ -25,6 +25,12 @@
 - [ ] golden/golden-lite 테스트 도입 가능성 조사.
 - [ ] GitHub Actions(workflows/ci.yaml) 작성: `flutter analyze`, `flutter test --coverage`.
 
+## 릴리스 & 운영
+- 릴리스 절차: `docs/release_workflow.md` 참고 (SemVer, release 브랜치, smoke test).
+- CHANGELOG는 모든 릴리스 전 업데이트하고, release 브랜치에서 태그를 생성한다.
+- issue template: `.github/ISSUE_TEMPLATE/theme_change.md`
+- 기여 가이드: `CONTRIBUTING.md`
+
 ## 참고 링크
 - 상위 앱 저장소: `/Users/poeticdev/workspace/web_dashboard`
 - 디자인 토큰 문서: `/Users/poeticdev/workspace/web_dashboard/docs/theme_design.md`

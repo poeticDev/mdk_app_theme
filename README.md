@@ -232,6 +232,11 @@ Container(
 - 마이그레이션 절차는 `docs/theme_package_migration.md`에 정리되어 있으며, 상위 앱(web_dashboard 등)에서 단계별로 체크하세요.
 - 설계/토큰 정책은 `/Users/poeticdev/workspace/web_dashboard/docs/theme_design.md` 및 `docs/theme_package_checklist.md`와 동기화합니다.
 
+### 릴리스 전략 요약
+- 버전 규칙: SemVer(`0.x` 기간에는 breaking 가능). 주요 변경 시 CHANGELOG에 새 섹션 추가 후 태그(`vX.Y.Z`).
+- 브랜치: `main`(개발) → `release/x.y.z`(QA/문서) → 태그/배포 → main merge.
+- 자세한 절차/Smoke test 체크리스트는 `docs/release_workflow.md`에 정리되어 있습니다.
+
 ---
 
 ## 8. FAQ
@@ -249,8 +254,10 @@ A. `lib/src/brands` 하위에 새로운 토큰 파일을 만들고 `ThemeBrand` 
 
 ## 9. 기여/문의
 - 디자인 가이드: `/Users/poeticdev/workspace/web_dashboard/docs/theme_design.md`
-- 테마 패키지 계획: `/Users/poeticdev/workspace/web_dashboard/docs/theme_package_checklist.md`
+- 테마 패키지 계획: `docs/theme_package_checklist.md`
 - 마이그레이션 가이드: `docs/theme_package_migration.md`
+- 릴리스 플로우: `docs/release_workflow.md`
+- 기여 지침/Issue 템플릿: `CONTRIBUTING.md`, `.github/ISSUE_TEMPLATE/theme_change.md`
 - 이슈나 제안은 MDK 디자인-플랫폼 스쿼드 Slack 채널 또는 PR로 공유해주세요.
 
 행복한 테마 작업 되세요! 🎨
