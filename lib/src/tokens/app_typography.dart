@@ -26,7 +26,7 @@ class VariableFontFamily extends AppFontFamily {
   @override
   TextStyle apply(
     TextStyle? base,
-    _TypographyRole role, {
+    AppTypographyRole role, {
     double scale = 1.0,
   }) {
     final TextStyle resolved = base ?? const TextStyle();
@@ -58,7 +58,7 @@ class StaticFontFamily extends AppFontFamily {
   @override
   TextStyle apply(
     TextStyle? base,
-    _TypographyRole role, {
+    AppTypographyRole role, {
     double scale = 1.0,
   }) {
     final TextStyle resolved = base ?? const TextStyle();

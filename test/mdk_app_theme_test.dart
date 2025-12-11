@@ -2,7 +2,6 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mdk_app_theme/mdk_app_theme.dart';
 
 void main() {
@@ -58,8 +57,7 @@ void main() {
 
   group('ThemeRegistry', () {
     test('ensureDefaults registers lazy singletons', () {
-      final ThemeRegistry registry =
-          ThemeRegistry.custom(GetIt.asNewInstance());
+      final ThemeRegistry registry = ThemeRegistry.ephemeral();
       registry.ensureDefaults();
 
       final ThemePlatformAdapter firstAdapter = registry.adapter;
@@ -72,8 +70,7 @@ void main() {
     });
 
     test('custom adapter/controller override works', () {
-      final ThemeRegistry registry =
-          ThemeRegistry.custom(GetIt.asNewInstance());
+      final ThemeRegistry registry = ThemeRegistry.ephemeral();
       final _StubAdapter adapter = _StubAdapter();
       registry.registerAdapter(adapter);
       int builderCallCount = 0;

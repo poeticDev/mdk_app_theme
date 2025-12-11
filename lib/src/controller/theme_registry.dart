@@ -5,66 +5,53 @@ typedef ThemeControllerBuilder = ThemeController Function(
 );
 
 class ThemeRegistry {
-  ThemeRegistry._(this._container);
+  ThemeRegistry._();
 
-  factory ThemeRegistry.custom(GetIt container) {
-    return ThemeRegistry._(container);
+  factory ThemeRegistry.ephemeral() {
+    return ThemeRegistry._();
   }
 
-  final GetIt _container;
+  static final ThemeRegistry instance = ThemeRegistry._();
 
-  static final ThemeRegistry instance = ThemeRegistry._(GetIt.instance);
+  ThemePlatformAdapter? _adapter;
+  ThemeControllerBuilder? _controllerBuilder;
+  ThemeController? _controller;
 
   ThemePlatformAdapter get adapter {
     ensureDefaults();
-    return _container<ThemePlatformAdapter>();
+    return _adapter!;
   }
 
   ThemeController get controller {
     ensureDefaults();
-    return _container<ThemeController>();
+    _controller ??= _controllerBuilder!(adapter);
+    return _controller!;
   }
 
   void ensureDefaults() {
-    if (!_container.isRegistered<ThemePlatformAdapter>()) {
-      registerAdapter(const AdaptiveThemePlatformAdapter());
-    }
-    if (!_container.isRegistered<ThemeController>()) {
-      registerController(_buildDefaultController);
-    }
+    _adapter ??= const AdaptiveThemePlatformAdapter();
+    _controllerBuilder ??= _buildDefaultController;
   }
 
   void registerAdapter(ThemePlatformAdapter adapter) {
-    _replaceSingleton<ThemePlatformAdapter>(adapter);
+    _adapter = adapter;
+    _controller = null;
   }
 
   void registerController(ThemeControllerBuilder builder) {
-    _unregister<ThemeController>();
-    _container.registerLazySingleton<ThemeController>(() {
-      final ThemePlatformAdapter adapter = this.adapter;
-      return builder(adapter);
-    });
+    _controllerBuilder = builder;
+    _controller = null;
   }
 
   void reset() {
-    _unregister<ThemePlatformAdapter>();
-    _unregister<ThemeController>();
+    _adapter = null;
+    _controllerBuilder = null;
+    _controller = null;
   }
 
   static ThemeController _buildDefaultController(
     ThemePlatformAdapter adapter,
   ) {
     return ThemeController(adapter: adapter);
-  }
-
-  void _replaceSingleton<T extends Object>(T instance) {
-    _unregister<T>();
-    _container.registerSingleton<T>(instance);
-  }
-
-  void _unregister<T extends Object>() {
-    if (_container.isRegistered<T>()) {
-      _container.unregister<T>();
-    }
   }
 }

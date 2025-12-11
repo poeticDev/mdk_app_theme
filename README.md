@@ -8,8 +8,8 @@ MDK 제품군에서 공유하는 ThemeData, 디자인 토큰, AdaptiveTheme 연�
 - Flutter `>=3.24.0`, Dart `>=3.9.2`
 - peer dependencies
   - `adaptive_theme: ^3.7.2`
-  - `flutter_riverpod: ^3.0.3`
-- 패키지 내부에서 `get_it: ^9.2.0`을 직접 의존하고 있으므로 host 앱은 별도 선언 없이 사용 가능합니다. 앱에서 자체적으로 get_it을 사용 중이라면 동일 버전을 권장합니다.
+  - `flutter_riverpod: ^3.0.3` (예제/문서에서 사용)
+- 패키지 본체는 DI 프레임워크에 의존하지 않습니다. host 앱에서 사용하는 DI(get_it, Provider 등)는 자유롭게 선택하면 됩니다.
 
 ---
 
@@ -77,7 +77,7 @@ class AppRoot extends StatelessWidget {
 }
 ```
 
-별도의 getIt 인스턴스를 쓰고 싶다면 `ThemeRegistry.custom(GetIt.asNewInstance())`를 사용하세요. 위와 같이 등록 로직을 제공하지 않더라도 `themeRegistryProvider`가 내부적으로 `ensureDefaults()`를 호출하므로 기본 Adapter/Controller는 자동으로 준비됩니다. 테스트에서는 registry에 mock adapter/controller를 등록하면 됩니다.
+필요하면 `ThemeRegistry.instance.registerAdapter(...)` 혹은 `registerController(...)`로 원하는 구현을 주입하세요. `ensureDefaults()`가 자동으로 기본 구현을 등록하므로, 아무것도 등록하지 않아도 동작합니다. 테스트/앱에서 커스텀 의존성을 써야 하면 위 API를 사용해 원하는 시점에 교체하면 됩니다. (별도의 get_it이나 기타 DI 컨테이너는 host 앱 책임입니다.)
 
 ---
 

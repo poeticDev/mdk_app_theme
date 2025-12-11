@@ -6,3 +6,5 @@
 - [x] **체크리스트 진행도 업데이트**: `docs/theme_package_checklist.md` 5단계 테스트 항목을 완료 상태로 갱신함. (2025-12-11)
 - [x] **build 디렉터리 정리**: `build/` 폴더를 삭제하고 `.gitignore`에 추가함. (2025-12-11)
 - [x] **브랜드 문서 보완**: `docs/theme_package_migration.md`에 브랜드 토큰 추가 절차를 단계별로 기록함. (2025-12-11)
+
+

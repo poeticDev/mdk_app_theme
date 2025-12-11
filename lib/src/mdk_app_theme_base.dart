@@ -4,7 +4,6 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
 
 part 'tokens/app_colors.dart';
 part 'tokens/app_typography.dart';
