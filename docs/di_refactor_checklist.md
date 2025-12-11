@@ -14,9 +14,18 @@
   - 패키지 내부에서 Riverpod import와 Provider를 전부 삭제했습니다.
   - README/예제에서만 Riverpod 연동 예시를 보여주며, host 앱 커스터마이징을 강조합니다.
 
-- [ ] **README/문서 업데이트**
-  - 설치 섹션에서 "DI-agnostic" 철학을 명시하고, get_it/Riverpod은 예시일 뿐임을 설명합니다.
-  - 통합 예시는 두 가지 버전으로 제공: (a) 순수 팩토리/ProviderScope override, (b) host 앱 DI/상태 관리 예시.
+- [x] **README/문서 업데이트** (완료: 2025-12-11)
+  - 설치/구성 섹션에 DI-agnostic 철학과 Riverpod 예시를 명시했습니다.
+- [x] **예제 앱 개편** (완료: 2025-12-11)
+  - 순수 Stateful 예제(`example/mdk_app_theme_example.dart`)와 Riverpod 예제(`example/riverpod_theme_example.dart`)를 분리 제공.
+- [x] **테스트 정비** (완료: 2025-12-11)
+  - 단위 테스트를 순수 객체 기반으로 유지하고, Riverpod 의존 테스트는 제거했습니다.
+- [x] **체크리스트 & 릴리스 문서 동기화** (완료: 2025-12-11)
+  - theme_package_checklist, release_workflow, migration 가이드에 DI-agnostic 정책을 반영했습니다.
+- [x] **마이그레이션 가이드 보완** (완료: 2025-12-11)
+  - host 앱 DI 책임 및 전환 절차를 `docs/theme_package_migration.md`에 업데이트했습니다.
+- [x] **커뮤니케이션 정비** (완료: 2025-12-11)
+  - README/문서/체크리스트에서 “DI/상태관리 host 앱 책임”을 강조했습니다.
 
 - [ ] **예제 앱 개편**
   - 기본 예제는 순수 객체만으로 동작하는 최소 구성을 제공하고, 별도 섹션에서는 `flutter_riverpod`(v3 이상)을 활용해 테마 토글/브랜드 전환을 구현하는 방법을 보여줍니다.
