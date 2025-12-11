@@ -4,15 +4,20 @@
 
 ## 1. 사전 준비
 - `web_dashboard` 최신 main 브랜치에서 작업 브랜치(`feat/theme-package`)를 생성한다.
-- `pubspec.yaml`에 아래와 같이 로컬 path dependency로 `mdk_app_theme`를 추가하고 `flutter pub get`으로 동기화한다.
+- `mdk_app_theme` 저장소를 git submodule 또는 sibling 디렉터리로 clone 한다.
+  - 예: `git clone git@github.com:poeticDev/mdk_app_theme.git ../mdk_app_theme`
+- `pubspec.yaml`에 git 또는 path dependency를 추가하고 `flutter pub get`으로 동기화한다.
 
 ```yaml
 dependencies:
   mdk_app_theme:
-    path: ../mdk_app_theme
+    git:
+      url: git@github.com:poeticDev/mdk_app_theme.git
+      ref: main   # 혹은 release 태그
+# (로컬 연동이 필요하면 path: ../mdk_app_theme 로 교체)
 ```
 
-- 앱 진입점에서 `ThemeRegistry`를 초기화하고, 기존 AdaptiveTheme bootstrap 코드를 패키지 example과 동일한 흐름으로 교체한다.
+- 앱 진입점에서 `ThemeRegistry`를 초기화하고, 기존 AdaptiveTheme bootstrap 코드를 README 섹션 2~4 단계와 동일하게 교체한다.
 
 ## 2. ThemeController 연동
 1. `ThemeRegistry.instance`에 맞춰 getIt DI 등록 함수를 정리한다.
@@ -30,6 +35,7 @@ dependencies:
 - `themeControllerStateProvider`를 사용하는 화면은 widget test에서 ProviderContainer를 override하여 deterministic하게 검증한다.
 
 ## 5. 배포 체크리스트
-- README와 앱 내 문서를 업데이트하여 패키지 버전, 설치 방법, 확장 전략을 명시한다.
-- `docs/theme_package_checklist.md` 항목을 최신 상태로 동기화하고, 마이그레이션 진행도(브랜치, 커밋 SHA)를 기록한다.
-- 릴리스 노트(CHANGELOG)에는 패키지 전환으로 인한 breaking change 및 새 API 사용법을 요약한다.
+- README/앱 내 개발 문서에 패키지 버전, 설치 방법, 확장 전략을 명시한다.
+- `docs/theme_package_checklist.md`와 `docs/release_workflow.md` 항목을 최신 상태로 동기화하고, 마이그레이션 진행도(브랜치, 커밋 SHA)를 기록한다.
+- 릴리스 노트(CHANGELOG)에는 패키지 전환으로 인한 breaking change, API 사용법, 필요한 smoke 테스트를 명시한다.
+- 릴리스 브랜치(`release/x.y.z`)를 생성하고, 상위 앱에서 git dependency를 통해 smoke test 후 태그(`vX.Y.Z`)를 생성한다.
