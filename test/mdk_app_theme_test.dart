@@ -98,6 +98,43 @@ void main() {
       await controller.toggle(context);
       expect(adapter.mode, equals(AdaptiveThemeMode.light));
     });
+
+    test('getAppColors uses current mode and initial brand by default', () {
+      final _StubAdapter adapter = _StubAdapter();
+      final ThemeController controller = ThemeController(
+        adapter: adapter,
+        initialBrand: ThemeBrand.midnight,
+      );
+      final BuildContext context = _FakeBuildContext();
+
+      final AppColors actualColors = controller.getAppColors(context);
+
+      expect(actualColors.primary, equals(const Color(0xFF3F8CFF)));
+    });
+
+    test('getAppColors honors explicit mode and brand', () {
+      final _StubAdapter adapter = _StubAdapter();
+      final ThemeController controller = ThemeController(adapter: adapter);
+      final BuildContext context = _FakeBuildContext();
+
+      final AppColors actualColors = controller.getAppColors(
+        context,
+        mode: AdaptiveThemeMode.dark,
+        brand: ThemeBrand.midnight,
+      );
+
+      expect(actualColors.primary, equals(const Color(0xFF7CB6FF)));
+    });
+
+    test('getBrandList exposes registered brands', () {
+      final _StubAdapter adapter = _StubAdapter();
+      final ThemeController controller = ThemeController(adapter: adapter);
+
+      final List<ThemeBrand> actualBrands = controller.getBrandList();
+
+      expect(actualBrands, contains(ThemeBrand.defaultBrand));
+      expect(actualBrands, contains(ThemeBrand.midnight));
+    });
   });
 }
 

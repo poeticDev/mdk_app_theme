@@ -211,9 +211,10 @@ ElevatedButton(
 ```dart
 final ThemeController controller = ref.read(themeControllerProvider);
 final ThemeBrand brand = ref.read(themeControllerStateProvider).brand;
-final AppColors colors = controller.isDarkMode(context)
-    ? AppColors.dark(brand)
-    : AppColors.light(brand);
+final AppColors colors = controller.getAppColors(
+  context,
+  brand: brand,
+);
 
 Container(
   color: colors.primary,

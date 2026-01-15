@@ -2,6 +2,16 @@
 
 모든 중요 변경 사항은 이 파일에 기록돼 SemVer 버전 규칙과 연동된다.
 
+## [0.1.0-dev.1] - 2026-01-15
+
+### Added
+- ThemeController에 `getAppColors`/`getBrandList` API 추가.
+- `ThemeBrandRegistry`에서 브랜드 목록 조회 지원.
+
+### Changed
+- `ThemeController` 기본 브랜드 추적을 위해 `initialBrand` 파라미터 도입.
+- README의 현재 테마 색상 조회 예제를 `getAppColors` 기반으로 정리.
+
 ## [0.1.0] - 2025-12-11
 
 ### Added

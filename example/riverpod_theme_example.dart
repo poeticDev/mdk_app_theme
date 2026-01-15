@@ -194,6 +194,8 @@ class _BrandSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeControllerState state = ref.watch(themeStateProvider);
     final ThemeStateNotifier notifier = ref.read(themeStateProvider.notifier);
+    final ThemeController controller = ref.read(themeControllerProvider);
+    final List<ThemeBrand> brands = controller.getBrandList();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -207,7 +209,7 @@ class _BrandSelector extends ConsumerWidget {
             }
             notifier.changeBrand(context, brand: next, isWebOverride: true);
           },
-          items: ThemeBrand.values
+          items: brands
               .map(
                 (ThemeBrand brand) => DropdownMenuItem<ThemeBrand>(
                   value: brand,

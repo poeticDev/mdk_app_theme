@@ -30,6 +30,10 @@ class ThemeBrandRegistry {
   AppColors darkColors(ThemeBrand brand) {
     return tokensOf(brand).darkColors;
   }
+
+  List<ThemeBrand> getBrandList() {
+    return List<ThemeBrand>.unmodifiable(_tokens.keys);
+  }
 }
 
 const ThemeBrandRegistry themeBrandRegistry = ThemeBrandRegistry(_brandTokens);

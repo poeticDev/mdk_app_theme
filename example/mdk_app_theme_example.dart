@@ -87,6 +87,7 @@ class _ThemeDemoHomePageState extends State<ThemeDemoHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<ThemeBrand> brands = _controller.getBrandList();
     return Scaffold(
       appBar: AppBar(
         title: const Text('MDK Theme Demo (Pure)'),
@@ -96,6 +97,7 @@ class _ThemeDemoHomePageState extends State<ThemeDemoHomePage> {
       ),
       body: _ThemeDemoBody(
         state: _state,
+        brands: brands,
         onBrandChanged: (ThemeBrand brand) => _changeBrand(context, brand),
       ),
     );
@@ -103,9 +105,14 @@ class _ThemeDemoHomePageState extends State<ThemeDemoHomePage> {
 }
 
 class _ThemeDemoBody extends StatelessWidget {
-  const _ThemeDemoBody({required this.state, required this.onBrandChanged});
+  const _ThemeDemoBody({
+    required this.state,
+    required this.brands,
+    required this.onBrandChanged,
+  });
 
   final ThemeControllerState state;
+  final List<ThemeBrand> brands;
   final ValueChanged<ThemeBrand> onBrandChanged;
 
   @override
@@ -117,7 +124,11 @@ class _ThemeDemoBody extends StatelessWidget {
         children: <Widget>[
           _ThemeInfoPanel(state: state),
           const SizedBox(height: 24),
-          _BrandSelector(state: state, onBrandChanged: onBrandChanged),
+          _BrandSelector(
+            state: state,
+            brands: brands,
+            onBrandChanged: onBrandChanged,
+          ),
         ],
       ),
     );
@@ -184,9 +195,14 @@ class _ThemeInfoContent extends StatelessWidget {
 }
 
 class _BrandSelector extends StatelessWidget {
-  const _BrandSelector({required this.state, required this.onBrandChanged});
+  const _BrandSelector({
+    required this.state,
+    required this.brands,
+    required this.onBrandChanged,
+  });
 
   final ThemeControllerState state;
+  final List<ThemeBrand> brands;
   final ValueChanged<ThemeBrand> onBrandChanged;
 
   @override
@@ -204,7 +220,7 @@ class _BrandSelector extends StatelessWidget {
             }
             onBrandChanged(next);
           },
-          items: ThemeBrand.values
+          items: brands
               .map(
                 (ThemeBrand brand) => DropdownMenuItem<ThemeBrand>(
                   value: brand,
