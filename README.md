@@ -5,7 +5,8 @@ MDK 제품군에서 공유하는 ThemeData, 디자인 토큰, AdaptiveTheme 연�
 ---
 
 ## 0. 사전 요구 사항
-- Flutter `>=3.24.0`, Dart `>=3.9.2`
+
+- Flutter `>=3.27.0`, Dart `>=3.6.0`
 - peer dependencies
   - `adaptive_theme: ^3.7.2`
   - `flutter_riverpod: ^3.0.3` (예제/문서에서 사용)
@@ -162,10 +163,10 @@ class ThemeChip extends ConsumerWidget {
 
 패키지에는 `AppFontFamily` 인터페이스와 두 가지 기본 전략이 포함되어 있습니다.
 
-| 전략 | 클래스 | 특징 |
-| --- | --- | --- |
+| 전략                       | 클래스                      | 특징                           |
+| -------------------------- | --------------------------- | ------------------------------ |
 | Pretendard Variable (기본) | `defaultVariableFontFamily` | `FontVariation` 기반 가변 폰트 |
-| Paperlogy Static | `paperlogyFontFamily` | 폰트 가중치별 별도 TTF |
+| Paperlogy Static           | `paperlogyFontFamily`       | 폰트 가중치별 별도 TTF         |
 
 사용 예시:
 
@@ -229,11 +230,12 @@ Container(
 
 또는 단순히 `Theme.of(context).colorScheme.primary`처럼 ColorScheme에서 직접 값을 인용하면 됩니다.
 
---- 
+---
 
 ## 6. 예제 앱
 
 `example/mdk_app_theme_example.dart`는 아래 시나리오를 모두 보여줍니다.
+
 - AdaptiveTheme + ProviderScope 구성
 - ThemeToggle을 통한 라이트/다크 토글
 - Dropdown으로 ThemeBrand(Default ↔ Midnight) 전환
@@ -250,6 +252,7 @@ Container(
 - 설계/토큰 정책은 `/Users/poeticdev/workspace/web_dashboard/docs/theme_design.md` 및 `docs/theme_package_checklist.md`와 동기화합니다.
 
 ### 릴리스 전략 요약
+
 - 버전 규칙: SemVer(`0.x` 기간에는 breaking 가능). 주요 변경 시 CHANGELOG에 새 섹션 추가 후 태그(`vX.Y.Z`).
 - 브랜치: `main`(개발) → `release/x.y.z`(QA/문서) → 태그/배포 → main merge.
 - 자세한 절차/Smoke test 체크리스트는 `docs/release_workflow.md`에 정리되어 있습니다.
@@ -270,6 +273,7 @@ A. `lib/src/brands` 하위에 새로운 토큰 파일을 만들고 `ThemeBrand` 
 ---
 
 ## 9. 기여/문의
+
 - 디자인 가이드: `/Users/poeticdev/workspace/web_dashboard/docs/theme_design.md`
 - 테마 패키지 계획: `docs/theme_package_checklist.md`
 - 마이그레이션 가이드: `docs/theme_package_migration.md`
