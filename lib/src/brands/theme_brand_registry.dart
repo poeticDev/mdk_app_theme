@@ -1,10 +1,7 @@
 part of mdk_app_theme_base;
 
 class ThemeBrandTokens {
-  const ThemeBrandTokens({
-    required this.lightColors,
-    required this.darkColors,
-  });
+  const ThemeBrandTokens({required this.lightColors, required this.darkColors});
 
   final AppColors lightColors;
   final AppColors darkColors;
@@ -40,9 +37,10 @@ const ThemeBrandRegistry themeBrandRegistry = ThemeBrandRegistry(_brandTokens);
 
 const Map<ThemeBrand, ThemeBrandTokens> _brandTokens =
     <ThemeBrand, ThemeBrandTokens>{
-  ThemeBrand.defaultBrand: defaultBrandTokens,
-  ThemeBrand.midnight: midnightBrandTokens,
-};
+      ThemeBrand.defaultBrand: defaultBrandTokens,
+      ThemeBrand.midnight: midnightBrandTokens,
+      ThemeBrand.orangeDay: orangeDayBrandTokens,
+    };
 
 extension ThemeBrandLabel on ThemeBrand {
   String get label {
@@ -51,6 +49,8 @@ extension ThemeBrandLabel on ThemeBrand {
         return 'Default';
       case ThemeBrand.midnight:
         return 'Midnight';
+      case ThemeBrand.orangeDay:
+        return 'Orange Day';
     }
   }
 }

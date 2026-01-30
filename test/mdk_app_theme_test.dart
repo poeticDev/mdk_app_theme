@@ -12,6 +12,10 @@ void main() {
       final AppColors dark = AppColors.dark(ThemeBrand.defaultBrand);
 
       expect(light.primary, equals(const Color(0xFF626AE8)));
+      expect(
+        light.secondary,
+        equals(const Color(0xFF626AE8)),
+      ); // Added secondary check
       expect(dark.surfaceElevated, equals(const Color(0xFF242A34)));
     });
 
@@ -19,8 +23,18 @@ void main() {
       final AppColors light = AppColors.light(ThemeBrand.midnight);
       final AppColors dark = AppColors.dark(ThemeBrand.midnight);
 
-      expect(light.primary, equals(const Color(0xFF3F8CFF)));
-      expect(dark.surface, equals(const Color(0xFF0F1724)));
+      // Updated Primary Expectation
+      expect(light.primary, equals(const Color(0xFF0098D8)));
+      expect(dark.surface, equals(const Color(0xFF121212)));
+    });
+
+    test('orange day brand matches spec', () {
+      final AppColors light = AppColors.light(ThemeBrand.orangeDay);
+      final AppColors dark = AppColors.dark(ThemeBrand.orangeDay);
+
+      expect(light.primary, equals(const Color(0xFF0098D8)));
+      expect(light.secondary, equals(const Color(0xFFFF7753)));
+      expect(dark.primary, equals(const Color(0xFF0098D8)));
     });
   });
 
@@ -35,8 +49,9 @@ void main() {
     });
 
     test('mobile typography can opt into Paperlogy static font', () {
-      final AppTypography typography =
-          AppTypography.mobile(fontFamily: paperlogyFontFamily);
+      final AppTypography typography = AppTypography.mobile(
+        fontFamily: paperlogyFontFamily,
+      );
       final TextStyle? body = typography.textTheme.bodyMedium;
       expect(body?.fontFamily, equals('Paperlogy'));
       expect(body?.fontWeight, equals(FontWeight.w500));
@@ -49,8 +64,10 @@ void main() {
       expect(theme.colorScheme.primary, equals(const Color(0xFF626AE8)));
       const String expectedFontFamilyReference =
           'packages/${AppTypography.defaultFontPackage}/${AppTypography.defaultFontFamily}';
-      expect(theme.textTheme.bodyMedium?.fontFamily,
-          equals(expectedFontFamilyReference));
+      expect(
+        theme.textTheme.bodyMedium?.fontFamily,
+        equals(expectedFontFamilyReference),
+      );
     });
   });
 
@@ -109,7 +126,7 @@ void main() {
 
       final AppColors actualColors = controller.getAppColors(context);
 
-      expect(actualColors.primary, equals(const Color(0xFF3F8CFF)));
+      expect(actualColors.primary, equals(const Color(0xFF0098D8)));
     });
 
     test('getAppColors honors explicit mode and brand', () {
@@ -123,7 +140,7 @@ void main() {
         brand: ThemeBrand.midnight,
       );
 
-      expect(actualColors.primary, equals(const Color(0xFF7CB6FF)));
+      expect(actualColors.primary, equals(const Color(0xFF0098D8)));
     });
 
     test('getBrandList exposes registered brands', () {
@@ -134,6 +151,7 @@ void main() {
 
       expect(actualBrands, contains(ThemeBrand.defaultBrand));
       expect(actualBrands, contains(ThemeBrand.midnight));
+      expect(actualBrands, contains(ThemeBrand.orangeDay));
     });
   });
 }
@@ -174,4 +192,5 @@ class _StubAdapter extends ThemePlatformAdapter {
     _mode = AdaptiveThemeMode.system;
   }
 }
+
 class _FakeBuildContext extends Fake implements BuildContext {}

@@ -10,6 +10,7 @@ part 'constants/theme_metrics.dart';
 part 'brands/theme_brand_registry.dart';
 part 'brands/default_brand_tokens.dart';
 part 'brands/midnight_brand_tokens.dart';
+part 'brands/orange_day_brand_tokens.dart';
 part 'adapters/theme_platform_adapter.dart';
 part 'controller/theme_registry.dart';
 part 'controller/theme_controller_state.dart';

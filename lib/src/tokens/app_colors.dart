@@ -1,12 +1,13 @@
 part of mdk_app_theme_base;
 
 /// 사용가능한 테마 브랜드
-enum ThemeBrand { defaultBrand, midnight }
+enum ThemeBrand { defaultBrand, midnight, orangeDay }
 
 /// 앱 전체에서 사용할 semantic color들을 정의
 class AppColors {
   final Color primary;
   final Color primaryVariant;
+  final Color secondary;
   final Color surface;
   final Color surfaceElevated;
   final Color textPrimary;
@@ -18,6 +19,7 @@ class AppColors {
   const AppColors({
     required this.primary,
     required this.primaryVariant,
+    required this.secondary,
     required this.surface,
     required this.surfaceElevated,
     required this.textPrimary,

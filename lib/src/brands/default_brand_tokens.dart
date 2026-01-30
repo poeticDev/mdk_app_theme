@@ -4,6 +4,7 @@ const ThemeBrandTokens defaultBrandTokens = ThemeBrandTokens(
   lightColors: AppColors(
     primary: Color(0xFF626AE8),
     primaryVariant: Color(0xff334479),
+    secondary: Color(0xFF626AE8),
     surface: Color(0xFFEFEFEF),
     surfaceElevated: Color(0xFFFAFAFA),
     textPrimary: Color(0xFF2C2C2C),
@@ -15,6 +16,7 @@ const ThemeBrandTokens defaultBrandTokens = ThemeBrandTokens(
   darkColors: AppColors(
     primary: Color(0xFF626AE8),
     primaryVariant: Color(0xff334479),
+    secondary: Color(0xFF626AE8),
     surface: Color(0xFF1B2028),
     surfaceElevated: Color(0xFF242A34),
     textPrimary: Color(0xFFE8EAED),
