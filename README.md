@@ -1,6 +1,6 @@
 # mdk_app_theme
 
-MDK 제품군에서 공유하는 ThemeData, 디자인 토큰, AdaptiveTheme 연동, Riverpod 상태, 브랜드 확장을 하나의 패키지로 제공합니다. Pretendard Variable(기본)과 Paperlogy 정적 폰트를 포함하고 있으며, ThemeRegistry/ThemeController 조합으로 앱별 DI와 상태 제어를 단순화했습니다.
+MDK 제품군에서 공유하는 ThemeData, 디자인 토큰, AdaptiveTheme 연동, Riverpod 상태, 브랜드 확장을 하나의 패키지로 제공합니다. **Flutter Material 3 표준(ColorScheme, ThemeExtension)**을 준수하며, Pretendard Variable(기본)과 Paperlogy 정적 폰트를 포함하고 있습니다. ThemeRegistry/ThemeController 조합으로 앱별 DI와 상태 제어를 단순화했습니다.
 
 ---
 
@@ -211,18 +211,18 @@ ElevatedButton(
 
 ```dart
 final ThemeController controller = ref.read(themeControllerProvider);
-final ThemeBrand brand = ref.read(themeControllerStateProvider).brand;
-final AppColors colors = controller.getAppColors(
-  context,
-  brand: brand,
-);
+// 1. 표준 색상: ColorScheme 사용
+final ColorScheme scheme = Theme.of(context).colorScheme;
+
+// 2. 커스텀 색상(Semantic): ThemeExtension 사용
+final AppColors? customColors = Theme.of(context).extension<AppColors>();
 
 Container(
-  color: colors.primary,
+  color: scheme.primary, // 표준 색상
   child: Text(
     '브랜드 전용 배경',
     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-          color: colors.surface,
+          color: customColors?.success ?? scheme.onPrimary, // 커스텀 색상
         ),
   ),
 );
@@ -248,7 +248,7 @@ Container(
 ## 7. 테스트와 문서
 
 - `flutter test`로 AppColors/AppTypography/AppTheme/ThemeRegistry/ThemeController 상태 검증을 수행합니다.
-- 마이그레이션 절차는 `docs/theme_package_migration.md`에 정리되어 있으며, 상위 앱(web_dashboard 등)에서 단계별로 체크하세요.
+- 마이그레이션 절차는 `docs/migration_v0_4_0.md`에 정리되어 있으며, 상위 앱(web_dashboard 등)에서 단계별로 체크하세요.
 - 설계/토큰 정책은 `/Users/poeticdev/workspace/web_dashboard/docs/theme_design.md` 및 `docs/theme_package_checklist.md`와 동기화합니다.
 
 ### 릴리스 전략 요약

@@ -44,10 +44,11 @@ class ThemeController {
   }) {
     final AdaptiveThemeMode resolvedMode = _resolveMode(context, mode);
     final ThemeBrand resolvedBrand = brand ?? _currentBrand;
+    final ThemeBrandTokens tokens = themeBrandRegistry.tokensOf(resolvedBrand);
     if (resolvedMode == AdaptiveThemeMode.dark) {
-      return AppColors.dark(resolvedBrand);
+      return tokens.darkExtension;
     }
-    return AppColors.light(resolvedBrand);
+    return tokens.lightExtension;
   }
 
   /// 등록된 브랜드 목록 조회
