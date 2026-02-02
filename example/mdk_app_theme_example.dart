@@ -189,10 +189,9 @@ class _ColorPaletteGrid extends StatelessWidget {
       children: [
         _ColorCard('Primary', colorScheme.primary, colorScheme.onPrimary),
         _ColorCard('Secondary', colorScheme.secondary, colorScheme.onSecondary),
+        _ColorCard('Tertiary', colorScheme.tertiary, colorScheme.onTertiary),
         _ColorCard('Surface', colorScheme.surface, colorScheme.onSurface),
         _ColorCard('Error', colorScheme.error, colorScheme.onError),
-        _ColorCard('Container', colorScheme.primaryContainer,
-            colorScheme.onPrimaryContainer),
       ],
     );
   }

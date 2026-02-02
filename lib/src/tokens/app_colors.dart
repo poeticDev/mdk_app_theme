@@ -6,8 +6,9 @@ enum ThemeBrand { defaultBrand, midnight, orangeDay }
 /// 앱 전체에서 사용할 semantic color들을 정의
 class AppColors {
   final Color primary;
-  final Color primaryVariant;
+  final Color? primaryVariant;
   final Color secondary;
+  final Color? tertiary;
   final Color surface;
   final Color surfaceElevated;
   final Color textPrimary;
@@ -18,8 +19,9 @@ class AppColors {
 
   const AppColors({
     required this.primary,
-    required this.primaryVariant,
+    this.primaryVariant,
     required this.secondary,
+    this.tertiary,
     required this.surface,
     required this.surfaceElevated,
     required this.textPrimary,

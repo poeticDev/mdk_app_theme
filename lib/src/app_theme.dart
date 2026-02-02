@@ -104,17 +104,33 @@ class AppTheme {
   static ColorScheme _buildColorScheme(AppColors c, {required bool isDark}) {
     final Brightness brightness = isDark ? Brightness.dark : Brightness.light;
 
+    // primaryVariant가 없을 경우 지능형 fallback (darken/lighten)
+    final Color secondary = c.primaryVariant ??
+        _shiftLightness(c.primary, amount: isDark ? 0.15 : -0.15);
+
+    // tertiary가 없을 경우 secondary 사용
+    final Color tertiary = c.tertiary ?? secondary;
+
     return ColorScheme(
       brightness: brightness,
       primary: c.primary,
       onPrimary: c.surface,
-      secondary: c.primaryVariant,
+      secondary: secondary,
       onSecondary: c.surface,
+      tertiary: tertiary,
+      onTertiary: c.surface,
       surface: c.surfaceElevated,
       onSurface: c.textPrimary,
       error: c.error,
       onError: c.surface,
     );
+  }
+
+  /// 색상의 밝기를 조절하는 헬퍼 함수
+  static Color _shiftLightness(Color color, {required double amount}) {
+    final HSLColor hsl = HSLColor.fromColor(color);
+    final double newLightness = (hsl.lightness + amount).clamp(0.0, 1.0);
+    return hsl.withLightness(newLightness).toColor();
   }
 
   static ElevatedButtonThemeData _elevatedButtonTheme(

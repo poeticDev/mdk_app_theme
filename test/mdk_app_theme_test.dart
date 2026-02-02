@@ -11,10 +11,10 @@ void main() {
       final AppColors light = AppColors.light(ThemeBrand.defaultBrand);
       final AppColors dark = AppColors.dark(ThemeBrand.defaultBrand);
 
-      expect(light.primary, equals(const Color(0xFF626AE8)));
+      expect(light.primary, equals(const Color(0xFFFF7753)));
       expect(
         light.secondary,
-        equals(const Color(0xFF626AE8)),
+        equals(const Color(0xFF554b55)),
       ); // Added secondary check
       expect(dark.surfaceElevated, equals(const Color(0xFF242A34)));
     });
@@ -25,16 +25,36 @@ void main() {
 
       // Updated Primary Expectation
       expect(light.primary, equals(const Color(0xFF005695)));
-      expect(dark.surface, equals(const Color(0xFF0F121A)));
+      expect(dark.surface, equals(const Color(0xFF1B2028)));
     });
 
     test('orange day brand matches spec', () {
       final AppColors light = AppColors.light(ThemeBrand.orangeDay);
       final AppColors dark = AppColors.dark(ThemeBrand.orangeDay);
 
-      expect(light.primary, equals(const Color(0xFFAC3400)));
-      expect(light.secondary, equals(const Color(0xFF006A60)));
-      expect(dark.primary, equals(const Color(0xFFFFB596)));
+      expect(light.primary, equals(const Color(0xFFFF7753)));
+      expect(light.secondary, equals(const Color(0xFF554b55)));
+      expect(dark.primary, equals(const Color(0xFFFF7753)));
+    });
+
+    test('nullable primaryVariant generates fallback in AppTheme', () {
+      // Default brand light has no primaryVariant
+      final ThemeData theme = AppTheme.light(brand: ThemeBrand.defaultBrand);
+      final Color primary = const Color(0xFFFF7753);
+
+      // Expected: primary shifted by -0.15 lightness
+      final HSLColor hsl = HSLColor.fromColor(primary);
+      final Color expectedSecondary =
+          hsl.withLightness((hsl.lightness - 0.15).clamp(0.0, 1.0)).toColor();
+
+      expect(theme.colorScheme.primary, equals(primary));
+      expect(theme.colorScheme.secondary, equals(expectedSecondary));
+    });
+
+    test('tertiary color is correctly mapped in AppTheme', () {
+      // Default brand light has tertiary: Color(0xFF24879f)
+      final ThemeData theme = AppTheme.light(brand: ThemeBrand.defaultBrand);
+      expect(theme.colorScheme.tertiary, equals(const Color(0xFF24879f)));
     });
   });
 
@@ -61,7 +81,7 @@ void main() {
   group('AppTheme', () {
     test('light theme composes expected colors', () {
       final ThemeData theme = AppTheme.light(isWebOverride: true);
-      expect(theme.colorScheme.primary, equals(const Color(0xFF626AE8)));
+      expect(theme.colorScheme.primary, equals(const Color(0xFFFF7753)));
       const String expectedFontFamilyReference =
           'packages/${AppTypography.defaultFontPackage}/${AppTypography.defaultFontFamily}';
       expect(
@@ -140,7 +160,7 @@ void main() {
         brand: ThemeBrand.midnight,
       );
 
-      expect(actualColors.primary, equals(const Color(0xFFA0C9FF)));
+      expect(actualColors.primary, equals(const Color(0xFF626AE8)));
     });
 
     test('getBrandList exposes registered brands', () {
