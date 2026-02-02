@@ -2,27 +2,27 @@ part of mdk_app_theme_base;
 
 const ThemeBrandTokens midnightBrandTokens = ThemeBrandTokens(
   lightColors: AppColors(
-    primary: Color(0xFF0098D8),
-    primaryVariant: Color(0xFF005F87),
-    secondary: Color(0xFFFF7753),
-    surface: Color(0xFFE7ECF8),
-    surfaceElevated: Color(0xFFF2F6FF),
-    textPrimary: Color(0xFF0F1B33),
-    textSecondary: Color(0xFF3D4F73),
-    success: Color(0xFF33B780),
-    warning: Color(0xFFFFAD4F),
-    error: Color(0xFFDF5160),
+    primary: Color(0xFF005695), // Deep Ocean Blue
+    primaryVariant: Color(0xFF003F6E),
+    secondary: Color(0xFF006874), // Teal Accents
+    surface: Color(0xFFF9FAFB),
+    surfaceElevated: Color(0xFFFFFFFF),
+    textPrimary: Color(0xFF191C1E),
+    textSecondary: Color(0xFF41484D),
+    success: Color(0xFF006C4C),
+    warning: Color(0xFF9E6200),
+    error: Color(0xFFBA1A1A),
   ),
   darkColors: AppColors(
-    primary: Color(0xFF0098D8),
-    primaryVariant: Color(0xFF005F87),
-    secondary: Color(0xFFFF7753),
-    surface: Color(0xFF121212),
-    surfaceElevated: Color(0xFF192235),
-    textPrimary: Color(0xFFE6ECFF),
-    textSecondary: Color(0xFF9EB1DA),
-    success: Color(0xFF4DDFA7),
-    warning: Color(0xFFFFC27A),
-    error: Color(0xFFFF7E99),
+    primary: Color(0xFFA0C9FF), // Soft Blue (Tone 80)
+    primaryVariant: Color(0xFF004A77),
+    secondary: Color(0xFF4FD8EB), // Cyan/Teal (Tone 80)
+    surface: Color(0xFF0F121A), // Deep Navy (Tone 6) - NO PURE BLACK
+    surfaceElevated: Color(0xFF1E222D), // Slightly lighter navy
+    textPrimary: Color(0xFFE2E2E6),
+    textSecondary: Color(0xFFC2C7CE),
+    success: Color(0xFF33B780),
+    warning: Color(0xFFFFB77C),
+    error: Color(0xFFFFB4AB), // Soft Red
   ),
 );

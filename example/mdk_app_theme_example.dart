@@ -22,26 +22,28 @@ class ThemeDemoApp extends StatelessWidget {
       initial: initialMode,
       builder: (ThemeData lightTheme, ThemeData darkTheme) {
         return MaterialApp(
+          title: 'MDK Theme Showroom',
           theme: lightTheme,
           darkTheme: darkTheme,
-          home: const ThemeDemoHomePage(),
+          home: const ThemeShowroomPage(),
+          debugShowCheckedModeBanner: false,
         );
       },
     );
   }
 }
 
-class ThemeDemoHomePage extends StatefulWidget {
-  const ThemeDemoHomePage({super.key});
+class ThemeShowroomPage extends StatefulWidget {
+  const ThemeShowroomPage({super.key});
 
   @override
-  State<ThemeDemoHomePage> createState() => _ThemeDemoHomePageState();
+  State<ThemeShowroomPage> createState() => _ThemeShowroomPageState();
 }
 
-class _ThemeDemoHomePageState extends State<ThemeDemoHomePage> {
+class _ThemeShowroomPageState extends State<ThemeShowroomPage> {
   final ThemeController _controller = ThemeController();
   ThemeControllerState _state = const ThemeControllerState(
-    mode: AdaptiveThemeMode.light,
+    mode: AdaptiveThemeMode.system,
     brand: ThemeBrand.defaultBrand,
   );
 
@@ -57,9 +59,7 @@ class _ThemeDemoHomePageState extends State<ThemeDemoHomePage> {
     final AdaptiveThemeMode? saved = await _controller.loadSavedThemeMode();
     if (!mounted) return;
     if (saved != null) {
-      setState(() {
-        _state = _state.copyWith(mode: saved);
-      });
+      setState(() => _state = _state.copyWith(mode: saved));
     }
     await _refreshMode(context);
   }
@@ -67,9 +67,7 @@ class _ThemeDemoHomePageState extends State<ThemeDemoHomePage> {
   Future<void> _refreshMode(BuildContext context) async {
     final AdaptiveThemeMode mode = _controller.effectiveMode(context);
     if (!mounted) return;
-    setState(() {
-      _state = _state.copyWith(mode: mode);
-    });
+    setState(() => _state = _state.copyWith(mode: mode));
   }
 
   Future<void> _toggle(BuildContext context) async {
@@ -80,198 +78,250 @@ class _ThemeDemoHomePageState extends State<ThemeDemoHomePage> {
   Future<void> _changeBrand(BuildContext context, ThemeBrand brand) async {
     await _controller.setBrand(context, brand: brand);
     if (!mounted) return;
-    setState(() {
-      _state = _state.copyWith(brand: brand);
-    });
+    setState(() => _state = _state.copyWith(brand: brand));
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<ThemeBrand> brands = _controller.getBrandList();
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MDK Theme Demo (Pure)'),
-        actions: <Widget>[
-          ThemeToggle(isDarkMode: _state.isDark, onToggle: _toggle),
-        ],
-      ),
-      body: _ThemeDemoBody(
-        state: _state,
-        brands: brands,
-        onBrandChanged: (ThemeBrand brand) => _changeBrand(context, brand),
-      ),
-    );
-  }
-}
-
-class _ThemeDemoBody extends StatelessWidget {
-  const _ThemeDemoBody({
-    required this.state,
-    required this.brands,
-    required this.onBrandChanged,
-  });
-
-  final ThemeControllerState state;
-  final List<ThemeBrand> brands;
-  final ValueChanged<ThemeBrand> onBrandChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          _ThemeInfoPanel(state: state),
-          const SizedBox(height: 24),
-          _BrandSelector(
-            state: state,
-            brands: brands,
-            onBrandChanged: onBrandChanged,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ThemeInfoPanel extends StatelessWidget {
-  const _ThemeInfoPanel({required this.state});
-
-  final ThemeControllerState state;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
-    return Center(
-      child: Card(
-        margin: const EdgeInsets.all(24),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: _ThemeInfoContent(
-            textTheme: textTheme,
-            primaryColor: theme.colorScheme.primary,
-            brandLabel: state.brand.label,
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${_state.brand.label} Showroom'),
+        actions: <Widget>[
+          _BrandDropdown(
+            currentBrand: _state.brand,
+            onChanged: (brand) => _changeBrand(context, brand),
+            brands: _controller.getBrandList(),
           ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: Icon(_state.isDark ? Icons.dark_mode : Icons.light_mode),
+            onPressed: () => _toggle(context),
+            tooltip: 'Toggle Theme',
+          ),
+          const SizedBox(width: 16),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SectionHeader(title: 'Color Palette'),
+            _ColorPaletteGrid(colorScheme: theme.colorScheme),
+            const SizedBox(height: 32),
+            _SectionHeader(title: 'Typography'),
+            _TypographyPreview(textTheme: theme.textTheme),
+            const SizedBox(height: 32),
+            _SectionHeader(title: 'Components'),
+            _ComponentGallery(),
+          ],
         ),
       ),
     );
   }
 }
 
-class _ThemeInfoContent extends StatelessWidget {
-  const _ThemeInfoContent({
-    required this.textTheme,
-    required this.primaryColor,
-    required this.brandLabel,
-  });
-
-  final TextTheme textTheme;
-  final Color primaryColor;
-  final String brandLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text('Brand: $brandLabel', style: textTheme.titleMedium),
-        const SizedBox(height: 12),
-        Text('Primary color', style: textTheme.titleLarge),
-        const SizedBox(height: 8),
-        _ColorSwatch(color: primaryColor),
-        const SizedBox(height: 24),
-        Text('Typography preview', style: textTheme.titleMedium),
-        const SizedBox(height: 8),
-        Text(
-          'Pretendard Variable 기반 TextTheme 입니다.',
-          style: textTheme.bodyLarge,
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}
-
-class _BrandSelector extends StatelessWidget {
-  const _BrandSelector({
-    required this.state,
+class _BrandDropdown extends StatelessWidget {
+  const _BrandDropdown({
+    required this.currentBrand,
+    required this.onChanged,
     required this.brands,
-    required this.onBrandChanged,
   });
 
-  final ThemeControllerState state;
+  final ThemeBrand currentBrand;
+  final ValueChanged<ThemeBrand> onChanged;
   final List<ThemeBrand> brands;
-  final ValueChanged<ThemeBrand> onBrandChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text('브랜드 선택', style: Theme.of(context).textTheme.titleSmall),
-        const SizedBox(width: 12),
-        DropdownButton<ThemeBrand>(
-          value: state.brand,
-          onChanged: (ThemeBrand? next) {
-            if (next == null || next == state.brand) {
-              return;
-            }
-            onBrandChanged(next);
-          },
-          items: brands
-              .map(
-                (ThemeBrand brand) => DropdownMenuItem<ThemeBrand>(
-                  value: brand,
-                  child: Text(brand.label),
-                ),
-              )
-              .toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class ThemeToggle extends StatelessWidget {
-  const ThemeToggle({
-    super.key,
-    required this.isDarkMode,
-    required this.onToggle,
-  });
-
-  final bool isDarkMode;
-  final Future<void> Function(BuildContext context) onToggle;
-
-  @override
-  Widget build(BuildContext context) {
-    final String tooltip = isDarkMode ? '라이트 모드로 전환' : '다크 모드로 전환';
-    final IconData icon = isDarkMode ? Icons.dark_mode : Icons.light_mode;
-    final Color iconColor = isDarkMode ? Colors.yellow : Colors.orangeAccent;
-
-    return IconButton(
-      tooltip: tooltip,
-      icon: Icon(icon, color: iconColor),
-      onPressed: () => onToggle(context),
-    );
-  }
-}
-
-class _ColorSwatch extends StatelessWidget {
-  const _ColorSwatch({required this.color});
-
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 120,
-      height: 56,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<ThemeBrand>(
+          value: currentBrand,
+          onChanged: (val) => val != null ? onChanged(val) : null,
+          items: brands.map((brand) {
+            return DropdownMenuItem(
+              value: brand,
+              child: Text(brand.label),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+      ),
+    );
+  }
+}
+
+class _ColorPaletteGrid extends StatelessWidget {
+  const _ColorPaletteGrid({required this.colorScheme});
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: [
+        _ColorCard('Primary', colorScheme.primary, colorScheme.onPrimary),
+        _ColorCard('Secondary', colorScheme.secondary, colorScheme.onSecondary),
+        _ColorCard('Surface', colorScheme.surface, colorScheme.onSurface),
+        _ColorCard('Error', colorScheme.error, colorScheme.onError),
+        _ColorCard('Container', colorScheme.primaryContainer,
+            colorScheme.onPrimaryContainer),
+      ],
+    );
+  }
+}
+
+class _ColorCard extends StatelessWidget {
+  const _ColorCard(this.label, this.color, this.onColor);
+  final String label;
+  final Color color;
+  final Color onColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 140,
+      height: 100,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style: TextStyle(color: onColor, fontWeight: FontWeight.bold)),
+          Text(
+            '#${color.toARGB32().toRadixString(16).toUpperCase().substring(2)}',
+            style:
+                TextStyle(color: onColor.withValues(alpha: 0.8), fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TypographyPreview extends StatelessWidget {
+  const _TypographyPreview({required this.textTheme});
+  final TextTheme textTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Display Large 57pt', style: textTheme.displayLarge),
+            Text('Headline Medium 28pt', style: textTheme.headlineMedium),
+            Text('Title Medium 16pt (Medium weight)',
+                style: textTheme.titleMedium),
+            Text('Body Large 16pt (Regular weight) - Pretendard Variable',
+                style: textTheme.bodyLarge),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ComponentGallery extends StatelessWidget {
+  const _ComponentGallery();
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 24,
+      runSpacing: 24,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Buttons',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                ElevatedButton(onPressed: () {}, child: const Text('Elevated')),
+                const SizedBox(width: 8),
+                FilledButton(onPressed: () {}, child: const Text('Filled')),
+                const SizedBox(width: 8),
+                OutlinedButton(onPressed: () {}, child: const Text('Outlined')),
+              ],
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Inputs', style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            const SizedBox(
+              width: 200,
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Label',
+                  hintText: 'Input text',
+                ),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Chips', style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            Row(
+              children: const [
+                Chip(label: Text('Chip 1')),
+                SizedBox(width: 8),
+                FilterChip(
+                    selected: true, onSelected: null, label: Text('Selected')),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

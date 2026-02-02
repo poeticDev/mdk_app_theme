@@ -2,27 +2,27 @@ part of mdk_app_theme_base;
 
 const ThemeBrandTokens orangeDayBrandTokens = ThemeBrandTokens(
   lightColors: AppColors(
-    primary: Color(0xFF0098D8),
-    primaryVariant: Color(0xFF005F87),
-    secondary: Color(0xFFFF7753),
-    surface: Color(0xFFF9F4F1),
+    primary: Color(0xFFAC3400), // Terracotta / Deep Orange
+    primaryVariant: Color(0xFF862200),
+    secondary: Color(0xFF006A60), // Teal/Forest Green
+    surface: Color(0xFFFFF8F1), // Warm Paper/Cream
     surfaceElevated: Color(0xFFFFFFFF),
-    textPrimary: Color(0xFF2C2C2C),
-    textSecondary: Color(0xFF485157),
-    success: Color(0xFF33B780),
-    warning: Color(0xFFFFAD4F),
-    error: Color(0xFFDF5160),
+    textPrimary: Color(0xFF231A14),
+    textSecondary: Color(0xFF53433C),
+    success: Color(0xFF2E6C00),
+    warning: Color(0xFF904D00),
+    error: Color(0xFFBA1A1A),
   ),
   darkColors: AppColors(
-    primary: Color(0xFF0098D8),
-    primaryVariant: Color(0xFF005F87),
-    secondary: Color(0xFFFF7753),
-    surface: Color(0xFF1B2028),
-    surfaceElevated: Color(0xFF242A34),
-    textPrimary: Color(0xFFE8EAED),
-    textSecondary: Color(0xFFB0B8C2),
-    success: Color(0xFF4DDFA7),
-    warning: Color(0xFFFFC27A),
-    error: Color(0xFFFF7E99),
+    primary: Color(0xFFFFB596), // Soft Orange (Tone 80)
+    primaryVariant: Color(0xFFAC3400),
+    secondary: Color(0xFF53DBC9), // Soft Teal
+    surface: Color(0xFF19120C), // Warm Dark Grey
+    surfaceElevated: Color(0xFF261D16),
+    textPrimary: Color(0xFFEDE0DB),
+    textSecondary: Color(0xFFD0C4BF),
+    success: Color(0xFF91D56D),
+    warning: Color(0xFFFFB776),
+    error: Color(0xFFFFB4AB),
   ),
 );

@@ -24,17 +24,17 @@ void main() {
       final AppColors dark = AppColors.dark(ThemeBrand.midnight);
 
       // Updated Primary Expectation
-      expect(light.primary, equals(const Color(0xFF0098D8)));
-      expect(dark.surface, equals(const Color(0xFF121212)));
+      expect(light.primary, equals(const Color(0xFF005695)));
+      expect(dark.surface, equals(const Color(0xFF0F121A)));
     });
 
     test('orange day brand matches spec', () {
       final AppColors light = AppColors.light(ThemeBrand.orangeDay);
       final AppColors dark = AppColors.dark(ThemeBrand.orangeDay);
 
-      expect(light.primary, equals(const Color(0xFF0098D8)));
-      expect(light.secondary, equals(const Color(0xFFFF7753)));
-      expect(dark.primary, equals(const Color(0xFF0098D8)));
+      expect(light.primary, equals(const Color(0xFFAC3400)));
+      expect(light.secondary, equals(const Color(0xFF006A60)));
+      expect(dark.primary, equals(const Color(0xFFFFB596)));
     });
   });
 
@@ -126,7 +126,7 @@ void main() {
 
       final AppColors actualColors = controller.getAppColors(context);
 
-      expect(actualColors.primary, equals(const Color(0xFF0098D8)));
+      expect(actualColors.primary, equals(const Color(0xFF005695)));
     });
 
     test('getAppColors honors explicit mode and brand', () {
@@ -140,7 +140,7 @@ void main() {
         brand: ThemeBrand.midnight,
       );
 
-      expect(actualColors.primary, equals(const Color(0xFF0098D8)));
+      expect(actualColors.primary, equals(const Color(0xFFA0C9FF)));
     });
 
     test('getBrandList exposes registered brands', () {

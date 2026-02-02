@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0] - 2026-02-02
+
+### Changed
+
+- **Midnight Brand**: Improved dark mode aesthetics with 'Deep Navy' surface tint and soft blue primary (HCT Tone 6/80).
+- **Orange Day Brand**: **Visual Identity Fix**. Primary color changed from Blue to Terracotta Orange. Background changed to Warm Cream.
+
+### Added
+
+- **Theme Showroom**: Upgraded example app to a comprehensive showroom with component gallery and color palette view.
+- **Design Methodology**: Added `docs/theme_design_guide.md` covering HCT color spaces and tonal palettes.
+
 ## [0.2.0] - 2026-01-30
 
 ### Breaking Changes
