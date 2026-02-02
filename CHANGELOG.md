@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.1] - 2026-02-02
+
+### Changed
+
+- **Brand Colors**: 각 브랜드의 색상 가시성과 조화를 개선했습니다.
+  - **Default Brand**: `secondary`를 Slate Blue (`0xFF5A5D72`)로 변경하여 `primary`와 구분하고, `tertiary`로 Coral (`0xFFEF5350`)을 추가했습니다.
+  - **Midnight Brand**: `tertiary`로 Golden Amber (`0xFFFFAB00`)를 추가하여 포인트를 주었습니다.
+  - **Orange Day Brand**: `tertiary`로 Mustard/Sand (`0xFF6C5D00`)를 추가하여 자연스러운 조화를 유도했습니다.
+
 ## [0.4.0] - 2026-02-02
 
 ### Breaking Changes

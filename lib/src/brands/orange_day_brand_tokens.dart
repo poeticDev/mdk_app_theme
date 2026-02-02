@@ -4,7 +4,8 @@ const ThemeBrandTokens orangeDayBrandTokens = ThemeBrandTokens(
   lightScheme: ColorScheme.light(
     primary: Color(0xFFAC3400), // Terracotta / Deep Orange
     primaryContainer: Color(0xFF862200),
-    secondary: Color(0xFF006A60), // Teal/Forest Green
+    secondary: Color(0xFF006A60), // Forest Green
+    tertiary: Color(0xFF6C5D00), // Mustard/Sand
     surface: Color(0xFFFFF8F1), // Warm Paper/Cream
     onSurface: Color(0xFF231A14), // textPrimary
     onSurfaceVariant: Color(0xFF53433C), // textSecondary
@@ -14,6 +15,7 @@ const ThemeBrandTokens orangeDayBrandTokens = ThemeBrandTokens(
     primary: Color(0xFFFFB596), // Soft Orange (Tone 80)
     primaryContainer: Color(0xFFAC3400),
     secondary: Color(0xFF53DBC9), // Soft Teal
+    tertiary: Color(0xFFDDC680), // Pale Mustard
     surface: Color(0xFF19120C), // Warm Dark Grey
     onSurface: Color(0xFFEDE0DB), // textPrimary
     onSurfaceVariant: Color(0xFFD0C4BF), // textSecondary

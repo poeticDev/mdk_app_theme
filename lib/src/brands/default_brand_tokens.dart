@@ -3,21 +3,23 @@ part of mdk_app_theme_base;
 const ThemeBrandTokens defaultBrandTokens = ThemeBrandTokens(
   lightScheme: ColorScheme.light(
     primary: Color(0xFF626AE8),
-    primaryContainer: Color(0xff334479), // Legacy primaryVariant
-    secondary: Color(0xFF626AE8),
+    primaryContainer: Color(0xff334479),
+    secondary: Color(0xFF5A5D72), // Slate Blue
+    tertiary: Color(0xFFEF5350), // Coral
     surface: Color(0xFFEFEFEF),
-    onSurface: Color(0xFF2C2C2C), // textPrimary
-    onSurfaceVariant: Color(0xFF485157), // textSecondary
+    onSurface: Color(0xFF2C2C2C),
+    onSurfaceVariant: Color(0xFF485157),
     error: Color(0xFFE26D72),
     // Defaulting onPrimary, onSecondary to white/black via .light()
   ),
   darkScheme: ColorScheme.dark(
     primary: Color(0xFF626AE8),
     primaryContainer: Color(0xff334479),
-    secondary: Color(0xFF626AE8),
+    secondary: Color(0xFFC2C3D0), // Muted Slate Blue
+    tertiary: Color(0xFFFFB4AB), // Soft Coral
     surface: Color(0xFF1B2028),
-    onSurface: Color(0xFFE8EAED), // textPrimary
-    onSurfaceVariant: Color(0xFFB0B8C2), // textSecondary
+    onSurface: Color(0xFFE8EAED),
+    onSurfaceVariant: Color(0xFFB0B8C2),
     error: Color(0xFFE08A66),
   ),
   lightExtension: AppColors(

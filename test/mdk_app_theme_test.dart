@@ -14,7 +14,7 @@ void main() {
       final ColorScheme dark = tokens.darkScheme;
 
       expect(light.primary, equals(const Color(0xFF626AE8)));
-      expect(light.secondary, equals(const Color(0xFF626AE8)));
+      expect(light.secondary, equals(const Color(0xFF5A5D72))); // Slate Blue
       expect(dark.surface, equals(const Color(0xFF1B2028)));
     });
 
@@ -25,6 +25,7 @@ void main() {
       final ColorScheme dark = tokens.darkScheme;
 
       expect(light.primary, equals(const Color(0xFF005695)));
+      expect(light.tertiary, equals(const Color(0xFFFFAB00))); // Golden Amber
       expect(dark.surface, equals(const Color(0xFF0F121A)));
     });
 
@@ -36,6 +37,7 @@ void main() {
 
       expect(light.primary, equals(const Color(0xFFAC3400)));
       expect(light.secondary, equals(const Color(0xFF006A60)));
+      expect(light.tertiary, equals(const Color(0xFF6C5D00))); // Mustard
       expect(dark.primary, equals(const Color(0xFFFFB596)));
     });
   });
